@@ -14,7 +14,6 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -38,20 +37,21 @@ export class Book extends Tracability {
   @Column({ type: 'bigint', nullable: false })
   serie_id: number;
 
+  @ManyToOne(() => Serie, (serie) => serie.books)
   @JoinColumn({ name: 'serie_id' })
-  @OneToOne(() => Serie, { nullable: false })
   serie: Serie;
 
   @Column({ type: 'tinyint', nullable: false })
   type_id: number;
 
+  @OneToMany(() => Type, (type) => type.book)
   @JoinColumn({ name: 'type_id' })
-  @OneToMany(() => Type, (type) => type.books)
   types: Type[];
 
   @Column({ type: 'mediumint', nullable: false })
   author_id: number;
 
+  @ManyToMany(() => Author, (author) => author.books)
   @JoinTable({
     name: 'BOOK_AUTHOR',
     joinColumn: {
@@ -63,19 +63,19 @@ export class Book extends Tracability {
       referencedColumnName: 'author',
     },
   })
-  @ManyToMany(() => Author, (author) => author.books)
   author: Author[];
 
-  @Column({ type: 'mediumint', nullable: false })
+  @Column({ type: 'smallint', nullable: false })
   publisher_id: number;
 
+  @OneToMany(() => Publisher, (publisher) => publisher.book)
   @JoinColumn({ name: 'publisher_id' })
-  @OneToMany(() => Publisher, (publisher) => publisher.books)
   publisher: Publisher[];
 
   @Column({ type: 'tinyint', nullable: false })
   genre_id: number;
 
+  @ManyToMany(() => Genre, (genre) => genre.books)
   @JoinTable({
     name: 'BOOK_GENRE',
     joinColumn: {
@@ -87,7 +87,6 @@ export class Book extends Tracability {
       referencedColumnName: 'genre_id',
     },
   })
-  @ManyToMany(() => Genre, (genre) => genre.books)
   genre: Genre[];
 
   @Column({ type: 'date', nullable: false })
@@ -96,6 +95,7 @@ export class Book extends Tracability {
   @Column({ type: 'tinyint', nullable: false })
   edition_id: number;
 
+  @ManyToMany(() => Edition, (edition) => edition.books)
   @JoinTable({
     name: 'BOOK_EDITION',
     joinColumn: {
@@ -107,7 +107,6 @@ export class Book extends Tracability {
       referencedColumnName: 'edition_id',
     },
   })
-  @ManyToMany(() => Edition, (edition) => edition.books)
   edition: Edition[];
 
   @Column({ type: 'decimal', nullable: false })
@@ -116,8 +115,8 @@ export class Book extends Tracability {
   @Column({ type: 'tinyint', nullable: false })
   currency_id: number;
 
-  @JoinColumn({ name: 'currency_id' })
   @ManyToOne(() => Currency, (currency) => currency.books)
+  @JoinColumn({ name: 'currency_id' })
   currency: Currency;
 
   @Column({ type: 'smallint', nullable: false })

@@ -15,10 +15,11 @@ import { PublisherModule } from './publisher/publisher.module';
 import { GenreModule } from './genre/genre.module';
 import { EditionModule } from './edition/edition.module';
 import { CountryModule } from './country/country.module';
+import { BoxSetModule } from './box-set/box-set.module';
 import ormconfig from './db/ormconfig';
 
 @Module({
-  imports: [CollectionModule, TypeOrmModule.forRoot(ormconfig), VolumeModule, UserModule, BookModule, LanguageModule, CurrencyModule, SerieModule, TypeModule, AuthorModule, PublisherModule, GenreModule, EditionModule, CountryModule],
+  imports: [CollectionModule, TypeOrmModule.forRoot(ormconfig), VolumeModule, UserModule, BookModule, LanguageModule, CurrencyModule, SerieModule, TypeModule, AuthorModule, PublisherModule, GenreModule, EditionModule, CountryModule, BoxSetModule],
   controllers: [AppController],
   providers: [AppService],
 })

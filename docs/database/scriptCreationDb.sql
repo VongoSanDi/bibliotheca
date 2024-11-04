@@ -128,20 +128,20 @@ CREATE TABLE SERIE (
 CREATE TABLE BOOK (
     book_id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     isbn VARCHAR(13) NOT NULL UNIQUE,
-    book_number TINYINT UNSIGNED NOT NULL,
     original_title VARCHAR(255) NOT NULL,
-    description TEXT,
+    book_number TINYINT UNSIGNED NOT NULL,
     serie_id BIGINT UNSIGNED NOT NULL,
     type_id TINYINT UNSIGNED NOT NULL,
     author_id MEDIUMINT UNSIGNED NOT NULL,
     publisher_id SMALLINT UNSIGNED NOT NULL,
     genre_id TINYINT UNSIGNED NOT NULL,
-    publication_date DATE NOT NULL,
     edition_id TINYINT UNSIGNED NOT NULL,
+    release_date DATE NOT NULL,
     release_price DECIMAL(10,2) NOT NULL,
     currency_id TINYINT UNSIGNED NOT NULL,
     page_count SMALLINT UNSIGNED NOT NULL,
-    image_url VARCHAR(255),
+    image_url VARCHAR(255) NOT NULL,
+  description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     created_by MEDIUMINT UNSIGNED NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -180,11 +180,16 @@ CREATE TABLE VOLUME (
 
 CREATE TABLE BOX_SET (
     box_set_id SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    box_set_name VARCHAR(255) NOT NULL,
-    description TEXT,
+    isbn VARCHAR(13) NOT NULL UNIQUE,
+    original_box_set_name VARCHAR(255) NOT NULL,
+    serie_id BIGINT UNSIGNED NOT NULL,
+    author_id MEDIUMINT UNSIGNED NOT NULL,
+    publisher_id SMALLINT UNSIGNED NOT NULL,
     release_date DATE NOT NULL,
     release_price DECIMAL(10,2),
     currency_id TINYINT UNSIGNED,
+    image_url VARCHAR(255) NOT NULL,
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     created_by MEDIUMINT UNSIGNED NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -263,7 +268,7 @@ SELECT
     CONCAT(COALESCE(art.pen_name, CONCAT(art.first_name, ' ', art.last_name))) as artist_name,
     p.publisher_name,
     g.genre_name,
-    b.publication_date,
+    b.release_date,
     e.edition_name,
     b.release_price,
     c.currency_symbol,
@@ -352,7 +357,7 @@ SELECT
     COUNT(DISTINCT b.serie_id) as total_serie,
     COUNT(DISTINCT b.author_id) as total_authors,
     AVG(b.release_price) as avg_book_price,
-    MAX(b.publication_date) as latest_publication
+    MAX(b.release_date) as latest_publication
 FROM PUBLISHER p
     LEFT JOIN BOOK b ON p.publisher_id = b.publisher_id
 GROUP BY p.publisher_id;
