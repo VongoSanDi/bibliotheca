@@ -1,6 +1,8 @@
 import { Author } from 'src/author/entities/author.entity';
+import { BoxSetBook } from 'src/box-set-book/entities/box-set-book.entity';
 import { Tracability } from 'src/common/entities/base.tracability';
 import { Currency } from 'src/currency/entities/currency.entity';
+import { Language } from 'src/language/entities/language.entity';
 import { Publisher } from 'src/publisher/entities/publisher.entity';
 import { Serie } from 'src/serie/entities/serie.entity';
 import {
@@ -23,19 +25,26 @@ export class BoxSet extends Tracability {
   isbn: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  original_box_set_name: string;
+  original_box_set_title: string;
+
+  @Column({ type: 'tinyint', nullable: false })
+  language_id: number;
+
+  @ManyToOne(() => Language, (language) => language.boxSets)
+  @JoinColumn({ name: 'language_id' })
+  language: Language;
 
   @Column({ type: 'bigint', nullable: false })
   serie_id: number;
 
-  @ManyToOne(() => Serie, (serie) => serie.box_sets)
+  @ManyToOne(() => Serie, (serie) => serie.boxSets)
   @JoinColumn({ name: 'serie_id' })
   serie: Serie;
 
   @Column({ type: 'mediumint', nullable: false })
   author_id: number;
 
-  @ManyToMany(() => Author, (author) => author.box_sets)
+  @ManyToMany(() => Author, (author) => author.boxSets)
   @JoinTable({
     name: 'BOX_SET_AUTHOR',
     joinColumn: {
@@ -43,18 +52,18 @@ export class BoxSet extends Tracability {
       referencedColumnName: 'box_set_id',
     },
     inverseJoinColumn: {
-      name: 'auhtor_id',
+      name: 'author_id',
       referencedColumnName: 'author_id',
     },
   })
-  author: Author[];
+  authors: Author[];
 
   @Column({ type: 'smallint', nullable: false })
   publisher_id: number;
 
-  @ManyToOne(() => Publisher, (publisher) => publisher.box_sets)
+  @ManyToOne(() => Publisher, (publisher) => publisher.boxSets)
   @JoinColumn({ name: 'publisher_id' })
-  publisher: Publisher[];
+  publisher: Publisher;
 
   @Column({ type: 'date', nullable: false })
   release_date: Date;
@@ -65,13 +74,16 @@ export class BoxSet extends Tracability {
   @Column({ type: 'tinyint', nullable: true })
   currency_id: number;
 
-  @ManyToOne(() => Currency, (currency) => currency.box_sets)
+  @ManyToOne(() => Currency, (currency) => currency.boxSets)
   @JoinColumn({ name: 'currency_id' })
-  currency: Currency[];
+  currency: Currency;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
   image_url: string;
 
   @Column({ type: 'text', nullable: true })
   description: string;
+
+  @OneToMany(() => BoxSetBook, (boxSetBook) => boxSetBook.boxSet)
+  boxSetBooks: BoxSetBook[];
 }

@@ -1,15 +1,15 @@
-import { Book } from 'src/book/entities/book.entity';
 import { Tracability } from 'src/common/entities/base.tracability';
+import { Serie } from 'src/serie/entities/serie.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('TYPE')
-export class Type extends Tracability {
+@Entity('STATUS')
+export class Status extends Tracability {
   @PrimaryGeneratedColumn({ type: 'tinyint' })
-  type_id: number;
+  status_id: number;
 
   @Column({ type: 'varchar', length: 50, nullable: false })
-  type_name: string;
+  status_name: string;
 
-  @OneToMany(() => Book, (book) => book.type)
-  books: Book[];
+  @OneToMany(() => Serie, (serie) => serie.status)
+  series: Serie[];
 }

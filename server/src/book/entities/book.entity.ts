@@ -1,11 +1,12 @@
 import { Author } from 'src/author/entities/author.entity';
+import { BoxSetBook } from 'src/box-set-book/entities/box-set-book.entity';
 import { Tracability } from 'src/common/entities/base.tracability';
 import { Currency } from 'src/currency/entities/currency.entity';
 import { Edition } from 'src/edition/entities/edition.entity';
-import { Genre } from 'src/genre/entities/genre.entity';
 import { Publisher } from 'src/publisher/entities/publisher.entity';
 import { Serie } from 'src/serie/entities/serie.entity';
 import { Type } from 'src/type/entities/type.entity';
+import { Volume } from 'src/volume/entities/volume.entity';
 import {
   Column,
   Entity,
@@ -44,9 +45,9 @@ export class Book extends Tracability {
   @Column({ type: 'tinyint', nullable: false })
   type_id: number;
 
-  @OneToMany(() => Type, (type) => type.book)
+  @ManyToOne(() => Type, (type) => type.books)
   @JoinColumn({ name: 'type_id' })
-  types: Type[];
+  type: Type;
 
   @Column({ type: 'mediumint', nullable: false })
   author_id: number;
@@ -63,31 +64,14 @@ export class Book extends Tracability {
       referencedColumnName: 'author',
     },
   })
-  author: Author[];
+  authors: Author[];
 
   @Column({ type: 'smallint', nullable: false })
   publisher_id: number;
 
-  @OneToMany(() => Publisher, (publisher) => publisher.book)
+  @ManyToOne(() => Publisher, (publisher) => publisher.books)
   @JoinColumn({ name: 'publisher_id' })
-  publisher: Publisher[];
-
-  @Column({ type: 'tinyint', nullable: false })
-  genre_id: number;
-
-  @ManyToMany(() => Genre, (genre) => genre.books)
-  @JoinTable({
-    name: 'BOOK_GENRE',
-    joinColumn: {
-      name: 'book_id',
-      referencedColumnName: 'book_id',
-    },
-    inverseJoinColumn: {
-      name: 'genre_id',
-      referencedColumnName: 'genre_id',
-    },
-  })
-  genre: Genre[];
+  publisher: Publisher;
 
   @Column({ type: 'date', nullable: false })
   publication_date: Date;
@@ -107,7 +91,7 @@ export class Book extends Tracability {
       referencedColumnName: 'edition_id',
     },
   })
-  edition: Edition[];
+  editions: Edition[];
 
   @Column({ type: 'decimal', nullable: false })
   release_price: number;
@@ -115,7 +99,7 @@ export class Book extends Tracability {
   @Column({ type: 'tinyint', nullable: false })
   currency_id: number;
 
-  @ManyToOne(() => Currency, (currency) => currency.books)
+  @ManyToOne(() => Currency)
   @JoinColumn({ name: 'currency_id' })
   currency: Currency;
 
@@ -124,4 +108,10 @@ export class Book extends Tracability {
 
   @Column({ type: 'varchar', length: 255, nullable: false })
   image_url: string;
+
+  @OneToMany(() => BoxSetBook, (boxSetBook) => boxSetBook.book)
+  boxSetBooks: BoxSetBook[];
+
+  @OneToMany(() => Volume, (volume) => volume.book)
+  volumes: Volume[];
 }

@@ -30,7 +30,7 @@ export class Volume extends Tracability {
   language_id: number;
 
   @JoinColumn({ name: 'language_id' })
-  @OneToOne(() => Language, { nullable: false })
+  @ManyToOne(() => Language, { nullable: false })
   language: Language;
 
   @Column({ type: 'decimal', nullable: true })
