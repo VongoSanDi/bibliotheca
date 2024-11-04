@@ -1,0 +1,3 @@
+ENDPOINTS
+- User
+- Collection

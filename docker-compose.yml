@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MARIADB_DATABASE: bibliotheca
+      MARIADB_USER: andres
+      MARIADB_PASSWORD: andres
+      MARIADB_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
