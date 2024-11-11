@@ -18,10 +18,32 @@ import { CountryModule } from './country/country.module';
 import { BoxSetModule } from './box-set/box-set.module';
 import { BoxSetBookModule } from './box-set-book/box-set-book.module';
 import { StatusModule } from './status/status.module';
+import { AuthModule } from './auth/auth.module';
+import { CollectionVolumeModule } from './collection-volume/collection-volume.module';
 import ormconfig from './db/ormconfig';
 
 @Module({
-  imports: [CollectionModule, TypeOrmModule.forRoot(ormconfig), VolumeModule, UserModule, BookModule, LanguageModule, CurrencyModule, SerieModule, TypeModule, AuthorModule, PublisherModule, GenreModule, EditionModule, CountryModule, BoxSetModule, BoxSetBookModule, StatusModule],
+  imports: [
+    CollectionModule,
+    TypeOrmModule.forRoot(ormconfig),
+    VolumeModule,
+    UserModule,
+    BookModule,
+    LanguageModule,
+    CurrencyModule,
+    SerieModule,
+    TypeModule,
+    AuthorModule,
+    PublisherModule,
+    GenreModule,
+    EditionModule,
+    CountryModule,
+    BoxSetModule,
+    BoxSetBookModule,
+    StatusModule,
+    AuthModule,
+    CollectionVolumeModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

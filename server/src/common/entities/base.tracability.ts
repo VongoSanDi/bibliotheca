@@ -4,8 +4,8 @@ export abstract class Tracability {
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @Column({ type: 'bigint', nullable: false })
-  crated_by: number;
+  @Column({ type: 'mediumint', unsigned: true, nullable: false, default: 0 })
+  created_by: number;
 
   @UpdateDateColumn({
     type: 'timestamp',
@@ -13,6 +13,6 @@ export abstract class Tracability {
   })
   updated_at: Date;
 
-  @Column({ type: 'int', nullable: false })
+  @Column({ type: 'mediumint', unsigned: true, nullable: false, default: 0 })
   updated_by: number;
 }
