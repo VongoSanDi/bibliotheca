@@ -1,4 +1,13 @@
-[] Create a view allowing to me check the acquision month by month and year by year
-[] If if get the whole collection, create the statistics from the server or use the statistics query ?
-[] If for the birtgday we give gift card, how to ensure users do not abuse it by creating new accounts ??
-[] Plugin AUdit de mariadb, je pense que c'est en complément des colonnes de tracabilités, par exemple depuis la tracabilité on sera quand aura eu la modification et depuis les logs de Audit on saura ce qui a été modifier exactement, ils se complémentent ? https://mariadb.com/kb/en/mariadb-audit-plugin/
+- [ ] Create a view allowing to me check the acquision month by month and year by year
+- [ ] If if get the whole collection, create the statistics from the server or use the statistics query ?
+- [ ] If for the birtgday we give gift card, how to ensure users do not abuse it by creating new accounts ??
+- [ ] Plugin AUdit de mariadb, je pense que c'est en complément des colonnes de tracabilités, par exemple depuis la tracabilité on sera quand aura eu la modification et depuis les logs de Audit on saura ce qui a été modifier exactement, ils se complémentent ? https://mariadb.com/kb/en/mariadb-audit-plugin/
+- [ ] Ranger les colonnes, cela permettra une meilleur compréhension lors de requete SQL directement depuis la db
+- [ ] Ne pas rendre obligatoire d'indiquer les prix
+- [ ] last_login de USER dans le auth_guard
+- [ ] last_login dans le bdd en DATE ou TIMESTAMP ? Plutot DATE vue que c'est le auth-guard qui s'en occupera
+- [ ] table de liaison status_language ? Terminé, terminated, terminado ? Plusieurs langue ou gérer cela depuis le front ?
+- [ ] Chiffrer email
+- [ ] Chercher comment stocker les images des covers des livres
+- [ ] Côté client, pour réduire le nombre de transaction entre client - server - database, faire en sorte que l'utilisateur envoie un array de volume(s'il a acheté 10 livres, on envoie les 10 livres d'un coup, pas 1 par 1)
+- [ ] Trouver une solution pour éviter d'ajouter @ApiBearerAuth('bearer') a tous les controllers

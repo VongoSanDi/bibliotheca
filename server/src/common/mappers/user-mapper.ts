@@ -1,4 +1,8 @@
-import { CreateUserDto, UserResponseDto } from '../../user/dto/create-user.dto';
+import {
+  UserResponseDto,
+  UserValidateDto,
+} from 'src/user/dto/retrieve-user.dto';
+import { CreateUserDto } from '../../user/dto/create-user.dto';
 import { User } from '../../user/entities/user.entity';
 
 export class UserMapper {
@@ -14,11 +18,19 @@ export class UserMapper {
 
   static toResponseDto(user: User): UserResponseDto {
     let responseDto = new UserResponseDto();
-    console.log('aa', user);
-
     responseDto = {
       user_id: user.user_id,
       username: user.username,
+    };
+    return responseDto;
+  }
+
+  static toResponseDtoWithPassword(user: User): UserValidateDto {
+    let responseDto = new UserValidateDto();
+    responseDto = {
+      user_id: user.user_id,
+      username: user.username,
+      password_hash: user.password_hash,
     };
     return responseDto;
   }

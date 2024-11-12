@@ -9,15 +9,17 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, UserResponseDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { RetrieveUserDto } from './dto/retrieve-user.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { RetrieveUserDto, UserResponseDto } from './dto/retrieve-user.dto';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Public()
   @Post()
   @ApiOperation({ summary: 'Create user' })
   async create(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
@@ -25,6 +27,7 @@ export class UserController {
   }
 
   @Get()
+  @ApiBearerAuth('bearer')
   @ApiOperation({ summary: 'Retrieve all users' })
   async findAll(): Promise<UserResponseDto[]> {
     return await this.userService.findAll();

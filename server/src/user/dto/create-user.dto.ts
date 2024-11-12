@@ -19,11 +19,3 @@ export class CreateUserDto {
   @ApiPropertyOptional()
   gender_id?: number;
 }
-
-export class UserResponseDto {
-  @ApiProperty()
-  user_id: number;
-
-  @ApiProperty()
-  username: string;
-}
