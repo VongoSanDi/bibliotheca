@@ -12,7 +12,7 @@ export class User extends Tracability {
   @Column()
   email: string;
 
-  @Column({ select: false })
+  @Column()
   password_hash: string;
 
   @Column()
