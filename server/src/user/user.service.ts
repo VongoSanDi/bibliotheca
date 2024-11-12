@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -10,25 +11,26 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { UserMapper } from '../common/mappers/user-mapper';
 import { compareDataToHash, encrypt } from 'src/common/bcrypt';
-import {
-  RetrieveUserDto,
-  UserResponseDto,
-  UserValidateDto,
-} from './dto/retrieve-user.dto';
+import { RetrieveUserDto, UserResponseDto } from './dto/retrieve-user.dto';
+import { RetrieveUserSchema } from './schemas/user.schema';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
-  findOne(user_id: number): Promise<RetrieveUserDto>;
-  findOne(username: string): Promise<User>;
+  findOne(param: RetrieveUserDto): Promise<UserResponseDto>;
+  findOne(param: RetrieveUserDto): Promise<User>;
   /*
    *
    */
-  async findOne(param: number | string): Promise<UserResponseDto | User> {
+  async findOne(param: RetrieveUserDto): Promise<UserResponseDto | User> {
     try {
+      const validateSchema = RetrieveUserSchema.safeParse(param);
+      if (!validateSchema.success) {
+        throw new BadRequestException(validateSchema.error.errors);
+      }
       let user = new User();
       if (typeof param === 'number') {
         user = await this.userRepository.findOneByOrFail({

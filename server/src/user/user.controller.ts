@@ -34,6 +34,7 @@ export class UserController {
   }
 
   @Get(':user_id')
+  @ApiBearerAuth('bearer')
   @ApiOperation({ summary: 'Retrieve an user' })
   @ApiResponse({
     status: 200,
