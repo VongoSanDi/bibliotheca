@@ -18,6 +18,7 @@ import {
 } from './dto/retrieve-user.dto';
 import { CreateUserSchema, RetrieveUserSchema } from './schemas/user.schema';
 import { ValidateSchema } from 'src/common/utils/validators';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -80,7 +81,7 @@ export class UserService {
     }
   }
 
-  update(id: number) {
+  update(id: number, dto: UpdateUserDto) {
     return 'This action update';
   }
 

@@ -11,13 +11,13 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { RetrieveUserDto, UserResponseDto } from './dto/retrieve-user.dto';
+import { UserResponseDto } from './dto/retrieve-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Public()
   @Post()
@@ -61,10 +61,13 @@ export class UserController {
     return await this.userService.findOne(dto);
   }
 
-  @Patch(':id')
+  @Patch(':user_id')
   @ApiOperation({ summary: 'Update an user' })
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  update(
+    @Param('user_id', ParseIntPipe) user_id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.userService.update(user_id, updateUserDto);
   }
 
   @Delete(':id')
