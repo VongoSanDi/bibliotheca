@@ -43,14 +43,22 @@ export class UserController {
   })
   async findOne(
     @Param('user_id', ParseIntPipe) user_id: number,
-  ): Promise<RetrieveUserDto> {
-    return await this.userService.findOne(user_id);
+  ): Promise<UserResponseDto> {
+    const dto = {
+      param: user_id,
+    };
+    return await this.userService.findOne(dto);
   }
 
-  @Get(':id/library')
+  @Get(':user_id/library')
   @ApiOperation({ summary: 'Retrieve an user collection' })
-  async findOneLibrary(@Param('id') id: string): Promise<RetrieveUserDto> {
-    return await this.userService.findOne(+id);
+  async findOneLibrary(
+    @Param('user_id', ParseIntPipe) user_id: number,
+  ): Promise<UserResponseDto> {
+    const dto = {
+      param: user_id,
+    };
+    return await this.userService.findOne(dto);
   }
 
   @Patch(':id')
