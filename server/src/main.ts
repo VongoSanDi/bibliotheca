@@ -7,12 +7,14 @@ import {
   SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const httpAdapter = app.get(HttpAdapterHost);
+  const configService = app.get(ConfigService);
   app.enableCors({ credentials: true });
-  app.useGlobalFilters(new GlobalExceptionFilter(httpAdapter));
+  app.useGlobalFilters(new GlobalExceptionFilter(httpAdapter, configService));
 
   const config = new DocumentBuilder()
     .setTitle('Bibliotheca')
