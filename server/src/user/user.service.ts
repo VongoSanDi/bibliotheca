@@ -16,13 +16,13 @@ import {
   UserResponseDto,
   UserValidateDto,
 } from './dto/retrieve-user.dto';
-import { RetrieveUserSchema } from './schemas/user.schema';
+import { CreateUserSchema, RetrieveUserSchema } from './schemas/user.schema';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   /*
    *
@@ -39,12 +39,8 @@ export class UserService {
       }
       const user =
         typeof dto.param === 'number'
-          ? await this.userRepository.findOneByOrFail({
-              user_id: dto.param,
-            })
-          : await this.userRepository.findOneByOrFail({
-              username: dto.param,
-            });
+          ? await this.userRepository.findOneByOrFail({ user_id: dto.param })
+          : await this.userRepository.findOneByOrFail({ username: dto.param });
       if (dto.includePassword) {
         return {
           ...UserMapper.toResponseDto(user),
@@ -67,6 +63,10 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto): Promise<UserResponseDto> {
     try {
+      const validateSchema = CreateUserSchema.safeParse(createUserDto);
+      if (!validateSchema.success) {
+        throw new BadRequestException(validateSchema.error.errors);
+      }
       const userToEntity = UserMapper.toEntity(createUserDto);
       userToEntity.password_hash = await encrypt(createUserDto.password);
 
