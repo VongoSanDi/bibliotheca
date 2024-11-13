@@ -10,12 +10,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   canActivate(context: ExecutionContext) {
-    // Logs de debug
-    const request = context.switchToHttp().getRequest();
-    console.log('=== Debug Auth ===');
-    console.log('Headers:', request.headers);
-    console.log('Authorization:', request.headers.authorization);
-    console.log('================');
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),

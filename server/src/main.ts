@@ -7,12 +7,14 @@ import {
   SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const httpAdapter = app.get(HttpAdapterHost);
+  const configService = app.get(ConfigService);
   app.enableCors({ credentials: true });
-  app.useGlobalFilters(new GlobalExceptionFilter(httpAdapter));
+  app.useGlobalFilters(new GlobalExceptionFilter(httpAdapter, configService));
 
   const config = new DocumentBuilder()
     .setTitle('Bibliotheca')
@@ -53,12 +55,37 @@ async function bootstrap() {
           delete: 4,
         };
 
-        // First sort by path (endpoint name)
-        const pathDiff = a.get('path').localeCompare(b.get('path'));
-        if (pathDiff !== 0) return pathDiff;
+        const pathA = a.get('path');
+        const pathB = b.get('path');
+        const methodA = a.get('method');
+        const methodB = b.get('method');
 
-        // If same path(endpoint name), sort by http method
-        return methodsOrder[a.get('method')] - methodsOrder[b.get('method')];
+        // Si les deux sont des GET, on trie par profondeur puis alphabétiquement
+        if (methodA === 'get' && methodB === 'get') {
+          // Compte le nombre de segments dans le chemin
+          const depthA = pathA.split('/').length;
+          const depthB = pathB.split('/').length;
+
+          // Si la profondeur est différente, trie par profondeur
+          if (depthA !== depthB) {
+            return depthA - depthB;
+          }
+
+          // Si même profondeur, trie alphabétiquement
+          return pathA.localeCompare(pathB);
+        }
+
+        // Si l'un est GET et l'autre non, GET vient en premier
+        if (methodA === 'get' && methodB !== 'get') return -1;
+        if (methodA !== 'get' && methodB === 'get') return 1;
+
+        // Si aucun n'est GET, on utilise l'ordre des méthodes
+        if (methodA !== methodB) {
+          return methodsOrder[methodA] - methodsOrder[methodB];
+        }
+
+        // En dernier recours, trie par chemin
+        return pathA.localeCompare(pathB);
       },
     },
   };

@@ -9,11 +9,18 @@ import {
 import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 import { ApiError } from '../types/api-error';
 import { HttpAdapterHost } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(GlobalExceptionFilter.name);
-  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+  private readonly isDevelopment: boolean;
+  constructor(
+    private readonly httpAdapterHost: HttpAdapterHost,
+    private readonly configService: ConfigService,
+  ) {
+    this.isDevelopment = this.configService.get('NODE_ENV') !== 'production';
+  }
   catch(exception: unknown, host: ArgumentsHost) {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
@@ -27,6 +34,23 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
     };
 
+    // Get the stack, meaning which part of the code threw the exception
+    const getStackLocation = (error: Error): string | undefined => {
+      if (!this.isDevelopment) return undefined;
+      const stackLines = error.stack?.split('\n');
+      if (!stackLines) return undefined;
+
+      // Chercher la première ligne après le message d'erreur qui contient le chemin du fichier
+      const locationLine = stackLines.find((line, index) => {
+        // Ignorer la première ligne qui contient juste le message d'erreur
+        return (
+          index > 0 && line.includes('at ') && !line.includes('node_modules')
+        );
+      });
+
+      return locationLine?.trim();
+    };
+
     // Get query params
     const queryParams = request.query;
     const bodyParams = request.body;
@@ -35,6 +59,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     // Common exceptions
     if (exception instanceof HttpException) {
       const exceptionResponse = exception.getResponse();
+      const stackLocation = getStackLocation(exception);
       responseBody = {
         ...responseBody,
         statusCode: exception.getStatus(),
@@ -52,10 +77,12 @@ export class GlobalExceptionFilter implements ExceptionFilter {
           body: bodyParams,
           params: urlParams,
         },
+        ...(stackLocation && { stackLocation }),
       };
     }
     // Error from mariadb and typeorm
     else if (exception instanceof EntityNotFoundError) {
+      const stackLocation = getStackLocation(exception);
       responseBody = {
         ...responseBody,
         statusCode: HttpStatus.NOT_FOUND,
@@ -65,11 +92,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
           query: queryParams,
           params: urlParams,
         },
+        ...(stackLocation && { stackLocation }),
       };
     }
     // SQL errors
     else if (exception instanceof QueryFailedError) {
       const sqlError = exception as any;
+      const stackLocation = getStackLocation(exception);
       responseBody = {
         ...responseBody,
         statusCode: HttpStatus.BAD_REQUEST,
@@ -83,11 +112,17 @@ export class GlobalExceptionFilter implements ExceptionFilter {
           body: bodyParams,
           params: urlParams,
         },
+        ...(stackLocation && { stackLocation }),
       };
     }
     //
     else if (exception instanceof Error) {
-      responseBody.message = exception.message;
+      const stackLocation = getStackLocation(exception);
+      responseBody = {
+        ...responseBody,
+        message: exception.message,
+        ...(stackLocation && { stackLocation }),
+      };
     }
 
     // Clean the sensible datas such as passwords
@@ -104,8 +139,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       path: request.url,
       method: request.method,
       body: request.body,
-      // user: request.user, // TODO: A utiliser une fois l'authentification mis en place
+      user: request.user,
       timestamp: responseBody.timestamp,
+      stack: (exception as Error).stack,
     });
 
     httpAdapter.reply(ctx.getResponse(), responseBody, responseBody.statusCode);

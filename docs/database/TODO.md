@@ -11,3 +11,5 @@
 - [ ] Chercher comment stocker les images des covers des livres
 - [ ] Côté client, pour réduire le nombre de transaction entre client - server - database, faire en sorte que l'utilisateur envoie un array de volume(s'il a acheté 10 livres, on envoie les 10 livres d'un coup, pas 1 par 1)
 - [ ] Trouver une solution pour éviter d'ajouter @ApiBearerAuth('bearer') a tous les controllers
+- [ ] trouer à un moyen de i18n les messages d'erreurs fourni par zod
+- [ ] server: check que les dates ne soient pas inférieur à la date du jour
