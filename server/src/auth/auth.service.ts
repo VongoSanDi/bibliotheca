@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
-import { signInResponseDto } from './dto/sign-in.dto';
+import { SignInDto, signInResponseDto } from './dto/sign-in.dto';
+import { ValidateSchema } from 'src/common/utils/validators';
+import { signInSchema } from './schemas/auth';
 
 interface Payload {
   username: string;
@@ -15,14 +17,20 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) { }
 
-  async signIn(username: string, password: string): Promise<signInResponseDto> {
-    const user = await this.userService.validateUser(username, password);
+  async signIn(dto: SignInDto): Promise<signInResponseDto> {
+    try {
+      const validateDto = ValidateSchema<SignInDto>(signInSchema, dto);
+      const { username, password } = validateDto;
+      const user = await this.userService.validateUser(username, password);
 
-    const payload = { username: user.username, sub: user.user_id };
-    return {
-      access_token: await this.signJwt(payload),
-      user: user,
-    };
+      const payload = { username: user.username, sub: user.user_id };
+      return {
+        access_token: await this.signJwt(payload),
+        user: user,
+      };
+    } catch (e) {
+      throw e;
+    }
   }
 
   /*

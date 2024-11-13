@@ -1,11 +1,8 @@
+import {
+  passwordValidation,
+  usernameValidation,
+} from 'src/common/schemas/user';
 import { z } from 'zod';
-
-const usernameValidation = z.string().min(1).max(12);
-
-const passwordValidation = z
-  .string()
-  .min(1, 'password required')
-  .max(10, 'The password must contain 10 characters minimum');
 
 const numberIntValidation = z.number().gte(1).int();
 const emailValidation = z.string().email().min(3).max(50);

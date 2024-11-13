@@ -17,6 +17,7 @@ import {
   UserValidateDto,
 } from './dto/retrieve-user.dto';
 import { CreateUserSchema, RetrieveUserSchema } from './schemas/user.schema';
+import { ValidateSchema } from 'src/common/utils/validators';
 
 @Injectable()
 export class UserService {
@@ -31,17 +32,17 @@ export class UserService {
     dto: RetrieveUserDto,
   ): Promise<UserResponseDto | UserValidateDto> {
     try {
-      const validateSchema = RetrieveUserSchema.safeParse(dto);
-      console.log('vali', validateSchema);
+      const validatedDto = ValidateSchema<RetrieveUserDto>(
+        RetrieveUserSchema,
+        dto,
+      );
+      const { param, includePassword } = validatedDto;
 
-      if (!validateSchema.success) {
-        throw new BadRequestException(validateSchema.error.errors);
-      }
       const user =
-        typeof dto.param === 'number'
-          ? await this.userRepository.findOneByOrFail({ user_id: dto.param })
-          : await this.userRepository.findOneByOrFail({ username: dto.param });
-      if (dto.includePassword) {
+        typeof param === 'number'
+          ? await this.userRepository.findOneByOrFail({ user_id: param })
+          : await this.userRepository.findOneByOrFail({ username: param });
+      if (includePassword) {
         return {
           ...UserMapper.toResponseDto(user),
           password_hash: user.password_hash,
