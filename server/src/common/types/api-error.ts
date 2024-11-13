@@ -5,4 +5,5 @@ export interface ApiError {
   timestamp: string;
   path: string;
   parameters?: { [key: string]: any };
+  stackLocation?: string;
 }
