@@ -1,17 +1,24 @@
 import { LocalLibraryRounded } from '@mui/icons-material';
 import CustomAutocomplete from './Autocomplete';
+import { getBooks } from '../services/api/book';
+import { useState } from 'react';
 const Header = () => {
 
-  const optionsAutocomplete = [
-    {
-      id: 1,
-      label: 'One Piece Tome 1',
-    },
-    {
-      id: 2,
-      label: 'One Piece Tome 2',
-    }
-  ]
+  interface Book {
+    original_title: string;
+  }
+
+  const [optionsAutocomplete, setOptionsAutocomplete] = useState([])
+
+  const handleSearch = async (value: string) => {
+    console.log('handleSearch', value)
+    const books = await getBooks({ title: value }) //TODO Rework ça pour envoyer le champ title ou author selon le radio button
+    console.log('getBooks', books)
+    const options = books.data.map((book: Book) => ({
+      label: book.original_title
+    }))
+    setOptionsAutocomplete(options)
+  }
 
   const sxAutocomplete = [
     {
@@ -36,7 +43,7 @@ const Header = () => {
             </button>
           </div>
           <div>
-            <CustomAutocomplete options={optionsAutocomplete} label="Recherche par titre ou auteur" sx={sxAutocomplete} />
+            <CustomAutocomplete options={optionsAutocomplete} label="Recherche par titre ou auteur" sx={sxAutocomplete} onSearch={handleSearch} />
           </div>
           <div className='right-4'>
             <button>

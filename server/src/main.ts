@@ -14,7 +14,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const httpAdapter = app.get(HttpAdapterHost);
   const configService = app.get(ConfigService);
-  app.enableCors({ credentials: true });
+  app.enableCors({ credentials: true, origin: 'http://localhost:5173' });
   app.useGlobalFilters(new GlobalExceptionFilter(httpAdapter, configService));
   app.useGlobalInterceptors(new TransformInterceptor());
 

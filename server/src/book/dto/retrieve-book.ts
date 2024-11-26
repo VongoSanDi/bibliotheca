@@ -1,8 +1,16 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class RetrieveBookDto {
+export class RetrieveBookByIsbnDto {
   @ApiProperty()
   isbn: string;
+}
+
+export class RetrieveBookByFiltersDto {
+  @ApiPropertyOptional()
+  title?: string;
+
+  @ApiPropertyOptional()
+  author_id?: number;
 }
 
 export class BookResponseDto {
