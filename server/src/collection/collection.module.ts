@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { CollectionController } from './collection.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Collection } from './entities/collection.entity';
+import { UserCollection } from './entities/user-collection.view-entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Collection])],
+  imports: [TypeOrmModule.forFeature([UserCollection])],
   controllers: [CollectionController],
   providers: [CollectionService],
 })
-export class CollectionModule {}
+export class CollectionModule { }

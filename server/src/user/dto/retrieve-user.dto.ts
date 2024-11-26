@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class RetrieveUserDto {
   param: number | string;
-  includePassword?: boolean;
+  includePassword?: boolean = false;
 }
 // export class RetrieveUserDto {
 //   user_id: number;
@@ -17,7 +17,7 @@ export class RetrieveUserDto {
 
 export class UserResponseDto {
   @ApiProperty()
-  user_id: number;
+  id: number;
 
   @ApiProperty()
   username: string;

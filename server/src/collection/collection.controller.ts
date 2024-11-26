@@ -6,10 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
+import { UserCollectionResponseDto } from './dto/retrieve-collection.dto';
+import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
 
 @Controller('collection')
 export class CollectionController {
@@ -27,9 +37,19 @@ export class CollectionController {
     return await this.collectionService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.collectionService.findOne(+id);
+  @Get('user/:id')
+  @ApiBearerAuth('bearer')
+  @ApiOperation({ summary: 'Retrieve an user collection' })
+  @ApiParam({ name: 'id', required: true, type: Number })
+  @ApiQuery({ name: 'pageOptionsDto', required: false, type: Object })
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Query() pageOptionsDto: PageOptionsDto,
+  ): Promise<UserCollectionResponseDto> {
+    const dto = {
+      id: id,
+    };
+    return await this.collectionService.findOne(dto, pageOptionsDto);
   }
 
   @Patch(':id')

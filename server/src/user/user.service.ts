@@ -19,6 +19,8 @@ import {
 import { CreateUserSchema, RetrieveUserSchema } from './schemas/user.schema';
 import { ValidateSchema } from 'src/common/utils/validators';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
+import { PageOptionsSchema } from 'src/common/schemas/common';
 
 @Injectable()
 export class UserService {
@@ -33,6 +35,7 @@ export class UserService {
     dto: RetrieveUserDto,
   ): Promise<UserResponseDto | UserValidateDto> {
     try {
+      console.log('dto', dto);
       const validatedDto = ValidateSchema<RetrieveUserDto>(
         RetrieveUserSchema,
         dto,
@@ -41,7 +44,7 @@ export class UserService {
 
       const user =
         typeof param === 'number'
-          ? await this.userRepository.findOneByOrFail({ user_id: param })
+          ? await this.userRepository.findOneByOrFail({ id: param })
           : await this.userRepository.findOneByOrFail({ username: param });
       if (includePassword) {
         return {
@@ -55,12 +58,28 @@ export class UserService {
     }
   }
 
-  async findAll(): Promise<UserResponseDto[]> {
-    const users = await this.userRepository.find();
+  async findAll(
+    pageOptionsDto: PageOptionsDto,
+  ): Promise<{ results: UserResponseDto[]; itemCount: number }> {
+    try {
+      const validatePageOptions = ValidateSchema<PageOptionsDto>(
+        PageOptionsSchema,
+        pageOptionsDto,
+      );
+      const { take, skip, order, orderBy } = validatePageOptions;
 
-    const userMapped = users.map((user) => UserMapper.toResponseDto(user));
+      const [users, itemCount] = await this.userRepository.findAndCount({
+        take: take,
+        skip: skip,
+        order: { [orderBy]: order },
+      });
 
-    return userMapped;
+      const userMapped = users.map((user) => UserMapper.toResponseDto(user));
+
+      return { results: userMapped, itemCount };
+    } catch (e) {
+      throw e;
+    }
   }
 
   async create(createUserDto: CreateUserDto): Promise<UserResponseDto> {
@@ -113,7 +132,7 @@ export class UserService {
       if (!isPasswordMatching) {
         throw new UnauthorizedException("Password doesn't match");
       }
-      return { user_id: user.user_id, username: user.username };
+      return { id: user.id, username: user.username };
     } catch (e) {
       throw e;
     }

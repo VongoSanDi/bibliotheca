@@ -8,6 +8,7 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   app.enableCors({ credentials: true });
   app.useGlobalFilters(new GlobalExceptionFilter(httpAdapter, configService));
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   const config = new DocumentBuilder()
     .setTitle('Bibliotheca')

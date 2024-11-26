@@ -15,7 +15,7 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async signIn(dto: SignInDto): Promise<signInResponseDto> {
     try {
@@ -23,7 +23,7 @@ export class AuthService {
       const { username, password } = validateDto;
       const user = await this.userService.validateUser(username, password);
 
-      const payload = { username: user.username, sub: user.user_id };
+      const payload = { username: user.username, sub: user.id };
       return {
         access_token: await this.signJwt(payload),
         user: user,

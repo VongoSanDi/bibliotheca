@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('USER')
 export class User extends Tracability {
   @PrimaryGeneratedColumn({ type: 'mediumint', unsigned: true })
-  user_id: number;
+  id: number;
 
   @Column()
   username: string;

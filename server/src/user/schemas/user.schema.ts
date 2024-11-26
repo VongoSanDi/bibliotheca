@@ -4,11 +4,11 @@ import {
 } from 'src/common/schemas/user';
 import { z } from 'zod';
 
-const numberIntValidation = z.number().gte(1).int();
+const numberIntValidation = z.number().positive();
 const emailValidation = z.string().email().min(3).max(50);
 
 export const userSchema = z.object({
-  user_id: numberIntValidation,
+  id: numberIntValidation,
   username: usernameValidation,
   email: emailValidation,
   password: passwordValidation,
@@ -19,7 +19,7 @@ export const userSchema = z.object({
 
 export const CreateUserSchema = z.object({
   username: usernameValidation,
-  passport: passwordValidation,
+  password: passwordValidation,
   email: emailValidation,
   country_id: numberIntValidation,
   birth_date: z.string().date().optional(),

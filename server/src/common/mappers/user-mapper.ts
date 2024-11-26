@@ -19,7 +19,7 @@ export class UserMapper {
   static toResponseDto(user: User): UserResponseDto {
     let responseDto = new UserResponseDto();
     responseDto = {
-      user_id: user.user_id,
+      id: user.id,
       username: user.username,
     };
     return responseDto;
@@ -28,7 +28,7 @@ export class UserMapper {
   static toResponseDtoWithPassword(user: User): UserValidateDto {
     let responseDto = new UserValidateDto();
     responseDto = {
-      user_id: user.user_id,
+      id: user.id,
       username: user.username,
       password_hash: user.password_hash,
     };
