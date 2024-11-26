@@ -16,6 +16,11 @@ export class RetrieveUserDto {
 // }
 
 export class UserResponseDto {
+  constructor(data: Partial<UserResponseDto>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
   @ApiProperty()
   id: number;
 
@@ -24,5 +29,11 @@ export class UserResponseDto {
 }
 
 export class UserValidateDto extends UserResponseDto {
+  constructor(data: Partial<UserValidateDto>) {
+    super(data);
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
   password_hash: string;
 }

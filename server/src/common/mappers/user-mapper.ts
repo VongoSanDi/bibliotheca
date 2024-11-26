@@ -17,21 +17,17 @@ export class UserMapper {
   }
 
   static toResponseDto(user: User): UserResponseDto {
-    let responseDto = new UserResponseDto();
-    responseDto = {
+    return new UserResponseDto({
       id: user.id,
       username: user.username,
-    };
-    return responseDto;
+    });
   }
 
   static toResponseDtoWithPassword(user: User): UserValidateDto {
-    let responseDto = new UserValidateDto();
-    responseDto = {
+    return new UserValidateDto({
       id: user.id,
       username: user.username,
       password_hash: user.password_hash,
-    };
-    return responseDto;
+    });
   }
 }

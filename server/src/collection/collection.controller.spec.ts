@@ -35,6 +35,6 @@ describe('CollectionController', () => {
   });
 
   describe('findAll', () => {
-    it('should return all the collections', async () => { });
+    it('should return all the collections', async () => {});
   });
 });

@@ -12,12 +12,7 @@ import {
 import { CollectionService } from './collection.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UserCollectionResponseDto } from './dto/retrieve-collection.dto';
 import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
 
@@ -41,7 +36,6 @@ export class CollectionController {
   @ApiBearerAuth('bearer')
   @ApiOperation({ summary: 'Retrieve an user collection' })
   @ApiParam({ name: 'id', required: true, type: Number })
-  @ApiQuery({ name: 'pageOptionsDto', required: false, type: Object })
   async findOne(
     @Param('id', ParseIntPipe) id: number,
     @Query() pageOptionsDto: PageOptionsDto,

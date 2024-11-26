@@ -5,18 +5,18 @@ export class PageOptionsDto {
   readonly take: number = 10;
 
   @ApiPropertyOptional()
-  readonly order: string = 'ASC';
+  get skip(): number {
+    return (this.page - 1) * this.take;
+  }
 
   @ApiPropertyOptional()
   readonly page: number = 1;
 
   @ApiPropertyOptional()
-  readonly orderBy: string = 'id';
+  readonly order: string = 'ASC';
 
   @ApiPropertyOptional()
-  get skip(): number {
-    return (this.page - 1) * this.take;
-  }
+  readonly orderBy: string = 'id';
 }
 
 /**

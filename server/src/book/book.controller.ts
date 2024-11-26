@@ -1,7 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
+import { PaginatedResult } from 'src/common/types/response';
+import { BookResponseDto } from './dto/retrieve-book';
 
 @Controller('book')
 export class BookController {
@@ -12,9 +25,26 @@ export class BookController {
     return this.bookService.create(createBookDto);
   }
 
-  @Get()
-  findAll() {
-    return this.bookService.findAll();
+  @Get(':isbn')
+  @ApiBearerAuth('bearer')
+  @ApiOperation({ summary: 'Retrieve all books' })
+  async findAll(
+    @Param('isbn') isbn: string,
+    @Query() pageOptionsDto: PageOptionsDto,
+  ): Promise<PaginatedResult<BookResponseDto>> {
+    const dto = {
+      isbn: isbn,
+    };
+    const { results, itemCount } = await this.bookService.findAll(
+      dto,
+      pageOptionsDto,
+    );
+
+    return {
+      results,
+      pageOptionsDto,
+      itemCount,
+    };
   }
 
   @Get(':id')

@@ -1,10 +1,12 @@
 import { Tracability } from 'src/common/entities/base.tracability';
-import { Entity } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('BOOK')
 export class Book extends Tracability {
-  book_id: number;
+  @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
+  id: number;
 
+  @Column({ name: 'isbn' })
   isbn: string;
 
   original_title: string;
