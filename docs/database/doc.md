@@ -1,19 +1,218 @@
 # Sommaire
 
+1. [Introduction](#introduction)
+1.1 [Purpose](#purpose)
+1.2. [Context](#context)
+1.3. [Architecture](#architecture)
+2. [Conventions & standards](#conventions_standards)
+2.1 [Naming conventions](#naming_conventions)
+2.2 [Standard Data Types](#standard_data_type)
+3. [Tables structure](#tables_structure)
+
+---
+
+<a id="introduction"></a>
+# Introduction
+## Purpose
+This database is used to store the datas for the application bibliotheca.io, it allows the user to create a collection of books(whatever the format or type).
+
+<a id="context"></a>
+# Context
+
+<a id="architecture"></a>
+# Architecture
+DBMS: MariaDB
+Encoding: UTF-8
+Timezone: UTC
+
+# Conventions and Standards
+## Naming Conventions
+
+Tables: UPPERCASE, singular name
+Columns: snake_case
+Primary keys: id
+Foreign keys: [table_name]_id
+Indexes: idx_[table_name]_[column]
+
+## Standard Data Types
+
+Identifiers: TINYINT - SMALLINT - MEDIUMINT - BIGINT, all UNSIGNED
+String: VARCHAR(n)
+Dates: DATE
+Booleans: BOOLEAN
+Amounts: DECIMAL(precision, scale)
+
+# Tables structure
+## Reference tables
+### COUNTRY
+#### Description
+Store country reference data used across the application
+
+#### Columns
+| name         | type             | NULL | Default        |Description                    |
+|--------------|------------------|------|----------------|------------------------------ |
+| id           | TINYINT UNSIGNED | No   | AUTO_INCREMENT | Primary key                   |
+| country_name | VARCHAR(50)      | No   | None           | Full name of the country      |
+| iso_code     | CHAR(2)          | No   | None           | ISO 3166 alpha-2 country code |
+
+#### Contraints
+- Primary Key: id
+- Unique: country_name, iso_code
+
+#### Example
+
+### CURRENCY
+#### Description
+Store currency reference data used across the application
+
+#### Columns
+| name            | type             | NULL | Default        |Description                    |
+|-----------------|------------------|------|----------------|------------------------------ |
+| id              | TINYINT UNSIGNED | No   | AUTO_INCREMENT | Primary key                   |
+| curency_name    | VARCHAR(50)      | No   | None           | Full name of the currency     |
+| currency_symbol | CHAR(3)          | No   | None           | The symbol of the currency    |
+| iso_code        | CHAR(3)          | No   | None           | ISO 4217 currency code        |
+
+#### Contraints
+- Primary Key: id
+- Unique: currency_name, currency_symbol, iso_code
+
+#### Example
+
+### LANGUAGE
+#### Description
+Store language reference data used across the application
+
+#### Columns
+| name            | type             | NULL | Default        |Description                    |
+|-----------------|------------------|------|----------------|------------------------------ |
+| id              | TINYINT UNSIGNED | No   | AUTO_INCREMENT | Primary key                   |
+| language_name   | VARCHAR(50)      | No   | None           | Full name of the language     |
+| iso_code        | CHAR(2)          | No   | None           | ISO 639-1 language code       |
+
+#### Contraints
+- Primary Key: id
+- Unique: language_name, iso_code
+
+#### Example
+
+### GENRE
+#### Description
+Store genre reference data used across the application
+
+#### Columns
+| name            | type             | NULL | Default        |Description                    |
+|-----------------|------------------|------|----------------|------------------------------ |
+| id              | TINYINT UNSIGNED | No   | AUTO_INCREMENT | Primary key                   |
+| genre_name      | VARCHAR(50)      | No   | None           | Full name of the genre        |
+
+#### Contraints
+- Primary Key: id
+- Unique: genre_name
+
+#### Example
+
+### TYPE
+#### Description
+Store type reference data used across the application
+
+#### Columns
+| name            | type             | NULL | Default        |Description                    |
+|-----------------|------------------|------|----------------|------------------------------ |
+| id              | TINYINT UNSIGNED | No   | AUTO_INCREMENT | Primary key                   |
+| type_name       | VARCHAR(50)      | No   | None           | Full name of the genre        |
+
+#### Contraints
+- Primary Key: id
+- Unique: type_name
+
+#### Example
+
+### EDITION
+#### Description
+Store edition reference data used across the application
+
+#### Columns
+| name            | type             | NULL | Default        |Description                    |
+|-----------------|------------------|------|----------------|------------------------------ |
+| id              | TINYINT UNSIGNED | No   | AUTO_INCREMENT | Primary key                   |
+| edition_name    | VARCHAR(50)      | No   | None           | Full name of the edition        |
+
+#### Contraints
+- Primary Key: id
+- Unique: edition_name
+
+#### Example
+
+### STATUS
+#### Description
+Store status reference data used across the application, we only store the status code and will use convert it in text in the client with i18n
+
+#### Columns
+| name            | type             | NULL | Default        |Description                    |
+|-----------------|------------------|------|----------------|------------------------------ |
+| id              | TINYINT UNSIGNED | No   | AUTO_INCREMENT | Primary key                   |
+| status_code     | VARCHAR(50)      | No   | None           | Code of the status            |
+
+#### Contraints
+- Primary Key: id
+- Unique: status_code
+
+#### Example
+
+## Main tables
+### USER
+#### Description
+Stores user account informations
+
+#### Columns
+| Name            | Type               | NULL | Default            |Description                  |
+|-----------------|--------------------|------|--------------------|-----------------------------|
+| id              | MEDIUMINT UNSIGNED | No   | AUTO_INCREMENT     | Primary key                 |
+| username        | VARCHAR(50)        | No   | No                 | Username of the user        |
+| email           | VARCHAR(255)       | No   | No                 | Email of the user           |
+| password_hash   | CHAR(60)           | No   | No                 | Hashed password of the user |
+| birth_date      | DATE               | Yes  | No                 | Birth date of the user      |
+| gender_id       | TINYINT UNSIGNED   | Yes  | No                 | Gender of the user          |
+| country_id      | TINYINT UNSIGNED   | No   | No                 | Country of the user         |
+| last_login      | DATE               | No   | No                 | Last time user logged in    |
+| created_at      | TIMESTAMP          | No   | CURRENCT_TIMESTAMP | Record creation timestamp   |
+| created_by      | MEDIUMINT UNSIGNED | No   | 0                  | User who create the record  |
+| updated_at      | TIMESTAMP          | No   | CURRENCT_TIMESTAMP | Last update timestamp       |
+| updated_by      | MEDIUMINT UNSIGNED | No   | 0                  | User who updatd the record  |
+
+#### Contraints
+- Primary Key: id
+- Unique: username, email
+- Foreign Key! country_id -> COUNTRY.id
+
+#### Triggers
+- user_before_insert: Sets creation/update metadata before insert
+
+#### Example
+
+
+
 1. [Schema](#schema)
 2. [Configuration](#configuration)
 3. [Tables](#tables)
-   1. [Utilisateur](#utilisateur)
-   2. [Série](#serie)
-   3. [Type](#type)
-   4. [Langue](#langue)
-   5. [Livre](#livre)
-   6. [Tome](#tome)
-   7. [Coffret](#coffret)
-   8. [Achat coffret](#achat-coffret)
-   9. [Coffret tome](#coffret-tome)
-   10. [Collection](#collection)
-   11. [Doublon](#doublon)
+   1. [Country](#country)
+   2. [Currency](#currency)
+   3. [Language](#language)
+   4. [Genre](#genre)
+   5. [Type](#type)
+   6. [Edition](#edition)
+   7. [Status](#status)
+   8. [User](user)
+   9. [Author](#author)
+   10. [Publisher](#publisher)
+   11. [Serie](#serie)
+   12. [Book](#book)
+   13. [Volume](#volume)
+   14. [Box Set](#book_set)
+   15. [Box Set Book](#book_set_book)
+   16. [Collection](#collection)
+   17. [Collection Volume](#collection_volume)
    12. [Favoris A DEFINIR](#favoris)
    13. [Commentaire A DEFINIR](#commentaire)
    14. [Auteur](#auteur)
@@ -27,20 +226,46 @@
 
 ---
 
+
+
 <a id="schema"></a>
 # Diagram
 
-https://dbdiagram.io/d/64d8109a02bd1c4a5eaec316
+https://dbdiagram.io/d/Libraria-64d8109a02bd1c4a5eaec316
 
 <a id="configuration"></a>
 # Configurations
 
 Use UTF-8 across the database
-Use DATETIME UTC and from the client convert into zoned hourj
+Use UTC for the DATETIME the database
 
 <a id="tables"></a>
 
 # Tables
+
+<a id="country"></a>
+
+## Country
+
+This table allow us to have the informations of the country internally, no need to query a public API
+| Country
+|--------
+| id
+| country_name
+| code_iso CHAR(2)
+
+### Details
+
+id_pays -> Identifiant unique du pays(numero opérateur)
+libelle_pays -> Libelle du pays
+code_iso -> Code ISO (ISO 3166)
+
+### Example
+
+| id_pays | libelle_pays | code_iso |
+| ------- | ------------ | -------- |
+| 1       | Japon        | JP       |
+| 2       | France       | FR       |
 
 <a id="user"></a>
 
@@ -72,7 +297,7 @@ gender_id      |
 country_id      |
 last_login      |
 
-### Exemple
+### Example
 
 | id_utilisateur | pseudo_utilisateur | date_inscription | date_naissance | sexe | id_pays | avatar_url            |
 | -------------- | ------------------ | ---------------- | -------------- | ---- | ------- | --------------------- |
@@ -110,7 +335,7 @@ nombre_tome_vf_serie -> Nombre de tome actuelle dans le pays de l'utilisateur
 date_debut_parution_vo_serie -> Date de début de la parution de la série
 date_fin_parution_vo_serie -> Date de fin de la parution de la série
 
-### Exemple
+### Example
 
 | id_serie | libelle_serie | id_auteur | id_statut | id_editeur | nombre_tome_vo_serie | nombre_tome_vf_serie | date_debut_parution_serie | date_fin_parution_serie |
 | -------- | ------------- | --------- | --------- | ---------- | -------------------- | -------------------- | ------------------------- | ----------------------- |
@@ -134,7 +359,7 @@ Cette table a pour objectif de stocker des informations sur les différents type
 id_type -> Id unique du type du livre
 libelle_type -> Libelle du type
 
-### Exemple
+### Example
 
 | id_type | libelle_type |
 | ------- | ------------ |
@@ -158,7 +383,7 @@ id_langue -> Id unique de la langue
 libelle_langue -> Libelle de la langue
 code_iso -> Code ISO de la langue(ISO 639)
 
-### Exemple
+### Example
 
 | id_type | libelle_type | code_iso |
 | ------- | ------------ | -------- |
@@ -207,7 +432,7 @@ id_devise -> Id de la devise du prix
 nombre_page_livre -> Nombre de page du livre
 image_url -> Url vers la première de couverture du livre
 
-### Exemple
+### Example
 
 | id_livre | isbn_livre    | titre_livre                    | id_serie | id_type | id_auteur | id_editeur | id_genre | date_parution_livre | id_edition | id_dessinateur | prix_sortie_livre | id_devise | nombre_page_livre | image_url |
 | -------- | ------------- | ------------------------------ | -------- | ------- | --------- | ---------- | -------- | ------------------- | ---------- | -------------- | ----------------- | --------- | ----------------- | --------- |
@@ -234,7 +459,7 @@ id_devise -> Id de la devise du prix
 id_livre -> Id du livre, c'est dans le livre que sont enregistré les informations "génériques"
 id_langue -> Id de la langue du tome
 
-### Exemple
+### Example
 
 | id_tome | prix_date_ajout | id_devise | date_ajout | id_livre | id_langue |
 | ------- | --------------- | --------- | ---------- | -------- | --------- |
@@ -266,7 +491,7 @@ prix_sortie_coffret : Prix du coffret.
 id_devise: Devise du prix
 date_sortie_coffret : Date de sortie du coffret.
 
-### Exemple
+### Example
 
 | id_coffret | libelle_coffret | description | prix_sortie_coffret | id_devise | date_sortie_coffret |
 | ---------- | --------------- | ----------- | ------------------- | --------- | ------------------- |
@@ -298,7 +523,7 @@ date_achat_coffret -> Date d'achat du coffret
 id_devise -> Devise du prix
 prix_achat_coffret -> prix d'achat
 
-### Exemple
+### Example
 
 | id_achat_coffret | id_utilisateur | id_coffret | date_achat |
 | ---------------- | -------------- | ---------- | ---------- |
@@ -323,7 +548,7 @@ id_coffret_tome -> Id unique
 id_coffret -> Id du coffet à lié
 id_tome -> Id du tome à lié
 
-### Exemple
+### Example
 
 | id_coffret_tome | id_coffret | id_tome |
 | --------------- | ---------- | ------- |
@@ -352,7 +577,7 @@ id_utilisateur (Clé étrangère) : Identifiant de l'utilisateur possédant le t
 id_tome (Clé étrangère) : Identifiant du tome possédé.
 date_acquisition : Date à laquelle le tome a été acquis.
 
-### Exemple
+### Example
 
 | id_possession | id_utilisateur | id_tome | date_acquisition |
 | ------------- | -------------- | ------- | ---------------- |
@@ -379,7 +604,7 @@ id_utilisateur (Clé étrangère) : Identifiant de l'utilisateur possédant le t
 id_tome (Clé étrangère) : Identifiant du tome possédé.
 date_acquisition : Date à laquelle le tome a été acquis.
 
-### Exemple
+### Example
 
 | id_doublon | id_utilisateur | id_tome |
 | ---------- | -------------- | ------- |
@@ -432,7 +657,7 @@ prenom_auteur -> Prenom de l'auteur
 pseudo_auteur -> Pseudo de l'auteur s'il prefere se faire appeler comme ça, nom d'artiste quoi
 id_pays -> Identifiant pays d'origine de l'auteur
 
-### Exemple
+### Example
 
 | id_auteur | nom_auteur | prenom_auteur | id_pays |
 | --------- | ---------- | ------------- | ------- |
@@ -456,7 +681,7 @@ Cette table permet de normaliser la gestion des genres.
 id_genre -> Identifiant unique du genre
 libelle_genre -> Libelle du genre
 
-### Exemple
+### Example
 
 | id_genre | libelle_genre |
 | -------- | ------------- |
@@ -478,7 +703,7 @@ Cette table permet de normaliser la gestion des statuts.
 id_statut -> Identifiant unique du statut
 libelle_statut -> Libelle du statut
 
-### Exemple
+### Example
 
 | id_statut | libelle_statut |
 | --------- | -------------- |
@@ -500,7 +725,7 @@ Cette table permet de normaliser la gestion des editions.
 id_edition -> Identifiant unique de l'édition
 libelle_edition -> Libelle de l'édition
 
-### Exemple
+### Example
 
 | id_edition | libelle_edition |
 | ---------- | --------------- |
@@ -524,7 +749,7 @@ id_editeur -> Identifiant unique de l'éditeur
 libelle_editeur -> Libelle de l'éditeur
 site_web_editeur -> Site web de l'éditeur
 
-### Exemple
+### Example
 
 | id_editeur | libelle_editeur | site_web_editeur |
 | ---------- | --------------- | ---------------- |
@@ -552,36 +777,12 @@ prenom_dessinateur -> Prenom du dessinateur
 pseudo_dessinateur -> Pseudo du dessinateur s'il prefere se faire appeler comme ça, nom d'artiste quoi
 id_pays -> Id du pays du dessinateur
 
-### Exemple
+### Example
 
 | id_dessinateur | nom_dessinateur | prenom_dessinateur | id_pays |
 | -------------- | --------------- | ------------------ | ------- |
 | 1              | b               | a                  | 1       |
 | 2              | c               | d                  | 2       |
-
-<a id="pays"></a>
-
-## Pays
-
-Cette table permet de normaliser la gestion des pays.
-| Pays
-|--------
-| id_pays
-| libelle_pays
-| code_iso CHAR(2)
-
-### Details
-
-id_pays -> Identifiant unique du pays(numero opérateur)
-libelle_pays -> Libelle du pays
-code_iso -> Code ISO (ISO 3166)
-
-### Exemple
-
-| id_pays | libelle_pays | code_iso |
-| ------- | ------------ | -------- |
-| 1       | Japon        | JP       |
-| 2       | France       | FR       |
 
 <a id="devise"></a>
 
@@ -602,7 +803,7 @@ libelle_devise -> Libelle de la devise
 symbole_devise -> Symbole internationale de la devise
 coe_iso -> Code iso de la devise (ISO 4217)
 
-### Exemple
+### Example
 
 | id_devise | libelle_devise | symbole_devise | code_iso |
 | --------- | -------------- | -------------- | -------- |

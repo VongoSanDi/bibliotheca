@@ -4,7 +4,6 @@ CREATE TABLE COUNTRY (
     id TINYINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     country_name VARCHAR(50) NOT NULL UNIQUE,
     iso_code CHAR(2) NOT NULL UNIQUE,
-    INDEX idx_country_iso (iso_code)
 );
 
 CREATE TABLE CURRENCY (
@@ -12,14 +11,12 @@ CREATE TABLE CURRENCY (
     currency_name VARCHAR(50) NOT NULL UNIQUE,
     currency_symbol CHAR(3) NOT NULL,
     iso_code CHAR(3) NOT NULL UNIQUE,
-    INDEX idx_currency_iso (iso_code)
 );
 
 CREATE TABLE LANGUAGE (
     id TINYINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     language_name VARCHAR(50) NOT NULL UNIQUE,
     iso_code CHAR(2) NOT NULL UNIQUE,
-    INDEX idx_language_iso (iso_code)
 );
 
 CREATE TABLE GENRE (
@@ -51,7 +48,7 @@ CREATE TABLE USER (
     birth_date DATE,
     gender_id TINYINT UNSIGNED,
     country_id TINYINT UNSIGNED NOT NULL,
-    last_login DATE,
+    last_login DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     created_by MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -98,13 +95,10 @@ CREATE TABLE SERIE (
     FOREIGN KEY (status_id) REFERENCES STATUS(id),
     FOREIGN KEY (genre_id) REFERENCES GENRE(id),
     FOREIGN KEY (publisher_id) REFERENCES PUBLISHER(id),
-    FOREIGN KEY (created_by) REFERENCES USER(id),
-    FOREIGN KEY (updated_by) REFERENCES USER(id),
     FOREIGN KEY (original_language_id) REFERENCES LANGUAGE(id)
 );
 
--- LIVRE, permet de gérer un livre dans plusieurs langue, différentes édition ...
--- It contains the general informations on a book
+-- It contains the general informations on a BOOK
 CREATE TABLE BOOK (
     id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     isbn VARCHAR(13) NOT NULL UNIQUE,
@@ -161,7 +155,7 @@ CREATE TABLE BOX_SET (
     id SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     isbn VARCHAR(13) NOT NULL UNIQUE,
     original_box_set_title VARCHAR(255) NOT NULL,
-    language_id TINYINT UNSIGNED NOT NuLL,
+    language_id TINYINT UNSIGNED NOT NULL,
     serie_id BIGINT UNSIGNED NOT NULL,
     author_id MEDIUMINT UNSIGNED NOT NULL,
     publisher_id SMALLINT UNSIGNED NOT NULL,
@@ -212,7 +206,6 @@ CREATE TABLE COLLECTION_VOLUME (
 );
 
 -- Indexes
-CREATE INDEX idx_book_isbn ON BOOK(isbn);
 CREATE INDEX idx_serie_name ON SERIE(serie_name);
 CREATE INDEX idx_user_username ON USER(username);
 CREATE INDEX idx_book_author ON BOOK(author_id);
