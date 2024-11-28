@@ -39,10 +39,20 @@
 # Introduction
 <a id="purpose"></a>
 ## Purpose
-This database is used to store the datas for the application bibliotheca.io, it allows the user to create a collection of books(whatever the format or type).
+This database is used to store the datas for the application bibliotheca.io. It allows the user to:
+- Create a personal collection of books(whatever the format or type).
+- Manage the collection such as the purchases
+- Maintain detailed informations about the books, authors ...
+- Improve the follow up status of the series and books
+- Remind how much money the user spend on his collection
 
 <a id="context"></a>
 ## Context
+This application is part of a collection management application designed for:
+- Private collectors who wish to catalog their collection
+- Collectors who follow several series simultaneously
+- Users managins multilingual collections(JAP/FR/IT ...)
+- Collectors wishing to track the valu of their collection
 
 <a id="architecture"></a>
 ## Architecture
