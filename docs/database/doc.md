@@ -1,4 +1,4 @@
-# Sommaire
+# Table of contents
 
 1. [Introduction](#introduction)
     1. [Purpose](#purpose)
@@ -51,7 +51,7 @@ This database is used to store the datas for the application bibliotheca.io. It 
 This application is part of a collection management application designed for:
 - Private collectors who wish to catalog their collection
 - Collectors who follow several series simultaneously
-- Users managins multilingual collections(JAP/FR/IT ...)
+- Users managing multilingual collections(JAP/FR/IT ...)
 - Collectors wishing to track the valu of their collection
 
 <a id="architecture"></a>
@@ -59,6 +59,7 @@ This application is part of a collection management application designed for:
 - DBMS: MariaDB
 - Encoding: UTF-8
 - Timezone: UTC
+- Logs: MariaDB Audit Plugin
 
 <a id="conventions_standards"></a>
 # Conventions and Standards

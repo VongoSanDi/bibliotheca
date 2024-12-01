@@ -6,5 +6,5 @@ export const BookByIsbnResponseSchema = z.object({
 
 export const RetrieveBookByFiltersSchema = z.object({
   title: z.string().optional(),
-  author: z.number().positive().optional(),
+  author_id: z.number().positive().optional(),
 });

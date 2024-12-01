@@ -45,12 +45,10 @@ export class BookController {
     @Query('title') title?: string,
     @Query('author_id') author_id?: number,
   ): Promise<PaginatedResult<BookResponseDto>> {
-    console.log('title', title);
     const dto = {
       title,
       author_id,
     };
-    console.log('dto', dto);
 
     const { results, itemCount } = await this.bookService.findByFilters(
       dto,

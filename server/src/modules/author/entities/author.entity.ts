@@ -1,5 +1,5 @@
 import { Tracability } from 'src/common/entities/base.tracability';
-import { Country } from 'src/country/entities/country.entity';
+import { Country } from 'src/modules//country/entities/country.entity';
 import { Entity } from 'typeorm';
 
 @Entity('AUTHOR')

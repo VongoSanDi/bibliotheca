@@ -14,9 +14,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResponseDto } from './dto/retrieve-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Public } from 'src/auth/decorators/public.decorator';
 import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
 import { PaginatedResult } from 'src/common/types/response';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('user')
 export class UserController {
@@ -50,6 +50,11 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The found record',
+    type: UserResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Resource not found',
     type: UserResponseDto,
   })
   async findOne(

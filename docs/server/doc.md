@@ -19,3 +19,50 @@ Since i'm familiar with js/ts and nestjs the best choice if fastify
 ENDPOINTS
 - User
 - Collection
+
+
+# Table of contents
+
+# Introduction
+
+# Technology stack
+- Node.js
+- NestJs
+- TypeScript
+- Fastify
+- Database: MariaDB
+- ORM: TypeORM
+- Schema Validation: Zod
+- Testing: Jest
+
+# Architecture
+
+# Project structure
+src/
+|-- auth/
+|-- author/
+    |--dto/ # Data models
+    |--entities/ # Entities
+    |--controller.ts # Route handler
+    |--controller.spec.ts # Router testing
+    |--module.ts # Used to resolve module and provider relationships and dependencies
+    |--service.ts # Business logic
+    |--service.spec.ts # Business logic testing
+|-- book/
+|-- box-set/
+|-- box-set-book/
+|-- collection/
+|-- collection-volume/
+|-- common/
+|-- country/
+|-- currency/
+|-- db/
+|-- edition/
+|-- genre/
+|-- language/
+|-- serie/
+|-- status/
+|-- type/
+|-- user/
+|-- volume/
+test/

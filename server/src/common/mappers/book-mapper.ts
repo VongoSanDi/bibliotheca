@@ -1,5 +1,5 @@
-import { BookResponseDto } from 'src/book/dto/retrieve-book';
-import { Book } from 'src/book/entities/book.entity';
+import { BookResponseDto } from 'src/modules/book/dto/retrieve-book';
+import { Book } from 'src/modules/book/entities/book.entity';
 
 export class BookMapper {
   static toResponseDto(book: Book): BookResponseDto {

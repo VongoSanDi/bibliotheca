@@ -22,7 +22,7 @@ import {
 export class BookService {
   constructor(
     @InjectRepository(Book) private readonly bookRepository: Repository<Book>,
-  ) { }
+  ) {}
   create(createBookDto: CreateBookDto) {
     return 'This action adds a new book';
   }
@@ -69,7 +69,7 @@ export class BookService {
         RetrieveBookByFiltersSchema,
         dto,
       );
-      const { title, author } = validateDto;
+      const { title, author_id } = validateDto;
       const validatePageOptions = ValidateSchema<PageOptionsDto>(
         PageOptionsSchema,
         pageOptionsDto,
@@ -80,8 +80,8 @@ export class BookService {
       const whereCondition: any = {};
       if (title) {
         whereCondition.original_title = ILike(`%${title}%`);
-      } else if (author) {
-        whereCondition.author_id = ILike(`%${author}%`);
+      } else if (author_id) {
+        whereCondition.author_id = ILike(`%${author_id}%`);
       }
       console.log('where', whereCondition);
 

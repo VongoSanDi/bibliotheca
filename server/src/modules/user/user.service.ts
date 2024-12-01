@@ -6,21 +6,21 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { UserMapper } from '../common/mappers/user-mapper';
 import { compareDataToHash, encrypt } from 'src/common/bcrypt';
+import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
+import { UserMapper } from 'src/common/mappers/user-mapper';
+import { PageOptionsSchema } from 'src/common/schemas/common';
+import { ValidateSchema } from 'src/common/utils/validators';
+import { Repository } from 'typeorm';
 import {
   RetrieveUserDto,
   UserResponseDto,
   UserValidateDto,
 } from './dto/retrieve-user.dto';
-import { CreateUserSchema, RetrieveUserSchema } from './schemas/user.schema';
-import { ValidateSchema } from 'src/common/utils/validators';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
-import { PageOptionsSchema } from 'src/common/schemas/common';
+import { User } from './entities/user.entity';
+import { CreateUserSchema, RetrieveUserSchema } from './schemas/user.schema';
 
 @Injectable()
 export class UserService {

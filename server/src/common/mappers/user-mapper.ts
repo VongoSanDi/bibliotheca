@@ -1,9 +1,9 @@
+import { CreateUserDto } from 'src/modules/user/dto/create-user.dto';
 import {
   UserResponseDto,
   UserValidateDto,
-} from 'src/user/dto/retrieve-user.dto';
-import { CreateUserDto } from '../../user/dto/create-user.dto';
-import { User } from '../../user/entities/user.entity';
+} from 'src/modules/user/dto/retrieve-user.dto';
+import { User } from 'src/modules/user/entities/user.entity';
 
 export class UserMapper {
   static toEntity(createUserDto: CreateUserDto): Partial<User> {

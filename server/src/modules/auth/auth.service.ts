@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/modules/user/user.service';
 import { SignInDto, signInResponseDto } from './dto/sign-in.dto';
 import { ValidateSchema } from 'src/common/utils/validators';
 import { signInSchema } from './schemas/auth';
@@ -15,7 +15,7 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signIn(dto: SignInDto): Promise<signInResponseDto> {
     try {

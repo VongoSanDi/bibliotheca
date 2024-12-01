@@ -11,33 +11,52 @@ import { PaginatedResult, Response } from '../types/response';
 
 @Injectable()
 export class TransformInterceptor<T>
-  implements NestInterceptor<T, Response<T>> {
+  implements NestInterceptor<T, Response<T>>
+{
   intercept(
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T>> {
     return next.handle().pipe(
       map((data) => {
-        // if the data have pageOptionsDto & itemCount it's a paginated response
-        if (data?.pageOptionsDto && data?.itemCount) {
+        // Use type guard to check if response is paginated
+        if (this.isPaginatedResult(data)) {
           const { results, pageOptionsDto, itemCount } = data;
           return {
             data: results,
             meta: new PageMetaDto(pageOptionsDto, itemCount),
+            success: true,
+            timestamp: new Date().toISOString(),
           };
         }
-        // Else it's a simple response
-        return { data };
+
+        // Handle null/undefined data
+        if (data === null || data === undefined) {
+          return {
+            data: null,
+            success: true,
+            timestamp: new Date().toISOString(),
+          };
+        }
+
+        // Standard response
+        return {
+          data,
+          success: true,
+          timestamp: new Date().toISOString(),
+        };
       }),
     );
   }
-  private isPaginatedResult(data: any): data is PaginatedResult<T> {
+
+  private isPaginatedResult(data: unknown): data is PaginatedResult<T> {
     return (
-      typeof data === 'object' &&
       data !== null &&
+      typeof data === 'object' &&
       'results' in data &&
       'pageOptionsDto' in data &&
-      'itemCount' in data
+      'itemCount' in data &&
+      Array.isArray((data as PaginatedResult<T>).results)
     );
   }
 }
