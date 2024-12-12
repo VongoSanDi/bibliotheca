@@ -39,7 +39,7 @@ export class CollectionController {
   async findOne(
     @Param('id', ParseIntPipe) id: number,
     @Query() pageOptionsDto: PageOptionsDto,
-  ): Promise<Response<UserCollectionResponseDto>> {
+  ): Promise<UserCollectionResponseDto> {
     const dto = {
       id: id,
     };

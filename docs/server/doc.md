@@ -14,12 +14,8 @@ https://stackoverflow.com/questions/36517829/what-does-multiplexing-mean-in-http
 4. User collection: lot of books cover, same as Home page
    → HTTP/2 really useful here
 
-Since i'm familiar with js/ts and nestjs the best choice if fastify
-
-ENDPOINTS
-- User
-- Collection
-
+Since i'm familiar with js/ts and nestjs the best choice is fastify
+Alternatives were Go, Deno
 
 # Table of contents
 
@@ -36,33 +32,39 @@ ENDPOINTS
 - Testing: Jest
 
 # Architecture
+The project is structured in modules following NestJS ways.
 
 # Project structure
 src/
-|-- auth/
-|-- author/
-    |--dto/ # Data models
-    |--entities/ # Entities
-    |--controller.ts # Route handler
-    |--controller.spec.ts # Router testing
-    |--module.ts # Used to resolve module and provider relationships and dependencies
-    |--service.ts # Business logic
-    |--service.spec.ts # Business logic testing
-|-- book/
-|-- box-set/
-|-- box-set-book/
-|-- collection/
-|-- collection-volume/
-|-- common/
-|-- country/
-|-- currency/
-|-- db/
-|-- edition/
-|-- genre/
-|-- language/
-|-- serie/
-|-- status/
-|-- type/
-|-- user/
-|-- volume/
+|-- common/ # Common utils
+|-- modules/ # Contains all the modules of the project, to be simple, each tables in the db is a module
+    |-- auth/
+    |-- author/
+        |--dto/ # Data models
+        |--entities/ # Entities
+        |--controller.ts # Route handler
+        |--controller.spec.ts # Controller testing
+        |--module.ts # Used to resolve module and provider relationships and dependencies
+        |--service.ts # Business logic
+        |--service.spec.ts # Business logic testing
+    |-- book/
+    |-- box-set/
+    |-- box-set-book/
+    |-- collection/
+    |-- collection-volume/
+    |-- common/
+    |-- country/
+    |-- currency/
+    |-- edition/
+    |-- genre/
+    |-- language/
+    |-- serie/
+    |-- status/
+    |-- type/
+    |-- user/
+    |-- volume/
+|-- db/ # Database connection settings
+    |-- ormconfig.ts # Connection settings
 test/
+DockerFile
+docker-compose.yml

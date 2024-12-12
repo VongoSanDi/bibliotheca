@@ -17,7 +17,7 @@ export class CollectionService {
   constructor(
     @InjectRepository(UserCollection)
     private readonly userCollectionRepository: Repository<UserCollection>,
-  ) { }
+  ) {}
 
   create(createCollectionDto: CreateCollectionDto) {
     return 'This action adds a new collection';
@@ -34,7 +34,7 @@ export class CollectionService {
   async findOne(
     dto: RetrieveCollectionDto,
     pageOptionsDto: PageOptionsDto,
-  ): Promise<UserCollectionResponseDto> {
+  ): Promise<{ data: UserCollectionResponseDto; meta: PageMetaDto }> {
     try {
       const validateDto = ValidateSchema<RetrieveCollectionDto>(
         RetrieveUserCollectionSchema,
