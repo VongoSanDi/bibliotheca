@@ -2,22 +2,32 @@ import { LocalLibraryRounded } from '@mui/icons-material';
 import CustomAutocomplete from './Autocomplete';
 import { getBooks } from '../services/api/book';
 import { useState } from 'react';
+import { Volume } from '../types/components/VolumeDetails';
+import { AutocompleteOptions } from '../types/components/Autocomplete';
+import VolumeDetails from './VolumeDetails';
 const Header = () => {
 
-  interface Book {
-    original_title: string;
-  }
-
-  const [optionsAutocomplete, setOptionsAutocomplete] = useState([])
+  const [optionsAutocomplete, setOptionsAutocomplete] = useState<AutocompleteOptions[]>([])
+  const [selectBook, setSelectBook] = useState<Volume | null>(null)
 
   const handleSearch = async (value: string) => {
-    console.log('handleSearch', value)
+    if (!value) return;
+
     const books = await getBooks({ title: value }) //TODO Rework ça pour envoyer le champ title ou author selon le radio button
-    console.log('getBooks', books)
-    const options = books.data.map((book: Book) => ({
-      label: book.original_title
+    const options = books.data.map((book: Volume) => ({
+      id: book.id,
+      label: book.original_title,
+      book: book
     }))
     setOptionsAutocomplete(options)
+  }
+
+  const handleOptionSelect = (option: AutocompleteOptions | null) => {
+    if (option) {
+      setSelectBook(option.book)
+    } else {
+      setSelectBook(null)
+    }
   }
 
   const sxAutocomplete = [
@@ -43,7 +53,7 @@ const Header = () => {
             </button>
           </div>
           <div>
-            <CustomAutocomplete options={optionsAutocomplete} label="Recherche par titre ou auteur" sx={sxAutocomplete} onSearch={handleSearch} />
+            <CustomAutocomplete options={optionsAutocomplete} label="Recherche par titre ou auteur" sx={sxAutocomplete} onSearch={handleSearch} onSelect={handleOptionSelect} />
           </div>
           <div className='right-4'>
             <button>
@@ -51,6 +61,11 @@ const Header = () => {
             </button>
           </div>
         </aside>
+        {selectBook && (
+          <div className="mt-20">
+            <VolumeDetails details={selectBook} />
+          </div>
+        )}
       </div>
     </>
   )

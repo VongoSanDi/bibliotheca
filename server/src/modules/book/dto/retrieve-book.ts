@@ -66,7 +66,4 @@ export class BookResponseDto {
 
   @ApiProperty()
   description: string;
-
-  @ApiProperty()
-  translated_title: string;
 }

@@ -1,10 +1,5 @@
 import { Autocomplete, TextField } from "@mui/material";
 
-type Options = {
-  id: number,
-  label: string
-}
-
 type Style = {
   minWidth: number;
 }
@@ -20,20 +15,26 @@ const CustomAutocomplete = ({ options, label = '', sx, onSearch }: CustomAutocom
   const handleInputChange = (event: React.SyntheticEvent, value: string) => {
     onSearch(value)
   }
+
+
   return (
-    <Autocomplete
-      id="custom-autocomplete"
-      freeSolo
-      options={options}
-      sx={sx}
-      onInputChange={handleInputChange}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-        />
-      )}
-    />
+    <>
+      <Autocomplete
+        id="custom-autocomplete"
+        freeSolo
+        options={options}
+        filterOptions={(x) => x}
+        sx={sx}
+        autoHighlight
+        onInputChange={handleInputChange}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={label}
+          />
+        )}
+      />
+    </>
   )
 }
 

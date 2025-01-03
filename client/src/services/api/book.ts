@@ -4,7 +4,7 @@ import { SearchBooksParams } from "../../types/apis/book";
 export const getBooks = async ({ title, author, page, limit }: SearchBooksParams = {}) => {
   const BASE_URL = import.meta.env.VITE_SERVER_URL;
   // TODO remove the hard written token and retrieve it from the localStorage
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJzdWIiOjQsImlhdCI6MTczMjY2MTM4NywiZXhwIjoxNzMyNjY0OTg3fQ.J61OnWZCmdB1l1pz_7d8UvNWAwB52aprpIbfpJfz868'
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJzdWIiOjQsImlhdCI6MTczNTk0MTAwOSwiZXhwIjoxNzM1OTQ0NjA5fQ.MOYFu2F0nv59Jrv5xE8tPcqnpGv0A14KXljh167FOZw'
   // const token = localStorage.getItem(token)
 
   const params = new URLSearchParams()

@@ -459,7 +459,6 @@ Store the volumes informations, it contains the specific country local informati
 | id                | BIGINT UNSIGNED    | No   | AUTO_INCREMENT     | Primary key                    |
 | book_id           | BIGINT UNSIGNED    | No   | No                 | Id of the reference book       |
 | language_id       | TINYINT UNSIGNED   | No   | No                 | Id of the language             |
-| translated_title  | VARCHAR(255)       | No   | No                 | Translated title of the volume |
 | acquisition_price | DECIMAL(10, 2)     | Yes  | No                 | Price the user paid the volume |
 | currency_id       | TINYINT UNSIGNED   | Yes  | No                 | Id of the currency used to pay |
 | acquisition_date  | DATE               | No   | No                 | Date of the acquisition        |
@@ -473,10 +472,10 @@ Store the volumes informations, it contains the specific country local informati
 - Foreign Key: book_id -> BOOK.id, language_id -> LANGUAGE.id, currency_id -> CURRENCY.id
 
 #### Example
-| id | book_id | language_id | translated_title | acquisition_price | currency_id | acquisition_date |
-|----|---------|-------------|------------------|-------------------|-------------|------------------|
-| 1  | 1       | 1           | "Dragon Ball 1"  | 7.80              | 1           | 2024-09-14       |
-| 2  | 2       | 2           | "One Piece 1"    | 5                 | 1           | 2021-12-25       |
+| id | book_id | language_id | acquisition_price | currency_id | acquisition_date |
+|----|---------|-------------|-------------------|-------------|------------------|
+| 1  | 1       | 1           | 7.80              | 1           | 2024-09-14       |
+| 2  | 2       | 2           | 5                 | 1           | 2021-12-25       |
 
 <a id="box_set"></a>
 ### BOX_SET

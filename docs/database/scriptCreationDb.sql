@@ -134,7 +134,6 @@ CREATE TABLE VOLUME (
     id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     book_id BIGINT UNSIGNED NOT NULL,
     language_id TINYINT UNSIGNED NOT NULL,
-    translated_title VARCHAR(255) NOT NULL,
     acquisition_price DECIMAL(10,2),
     currency_id TINYINT UNSIGNED,
     acquisition_date DATE NOT NULL,
@@ -258,14 +257,14 @@ DELIMITER ;
 DROP VIEW IF EXISTS user_collection;
 
 -- Since getting an user collection need a lot of join, i think the best way is to create a VIEW doing the join for me, so i just need to request if from the collection module
-CREATE OR REPLACE VIEW user_collection AS
+CREATE VIEW user_collection AS
 SELECT 
     U.id AS user_id,
     U.username,
     S.serie_name,
     B.book_number,
     B.original_title,
-    V.translated_title,
+    BNT.translated_title,
     A.pen_name AS author,
     V.acquisition_date,
     V.acquisition_price,
@@ -275,6 +274,7 @@ JOIN COLLECTION COL ON COL.user_id = U.id
 JOIN COLLECTION_VOLUME CV ON CV.collection_id = COL.id
 JOIN VOLUME V ON V.id = CV.volume_id
 JOIN BOOK B ON B.id = V.book_id
+JOIN BOOK_NAME_TRANSLATION BNT ON BNT.book_id = B.id
 JOIN SERIE S ON S.id = B.serie_id
 JOIN AUTHOR A ON A.id = S.author_id
 JOIN CURRENCY C ON C.id = V.currency_id;
