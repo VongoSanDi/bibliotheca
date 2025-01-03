@@ -17,6 +17,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
 import { PaginatedResult } from 'src/common/types/response';
 import { Public } from '../auth/decorators/public.decorator';
+import { ApiPaginationQuery } from 'src/common/decorators/pagination.decorator';
 
 @Controller('user')
 export class UserController {
@@ -32,6 +33,11 @@ export class UserController {
   @Get()
   @ApiBearerAuth('bearer')
   @ApiOperation({ summary: 'Retrieve all users' })
+  @ApiResponse({
+    status: 200,
+    type: UserResponseDto
+  })
+  @ApiPaginationQuery()
   async findAll(
     @Query() pageOptionsDto: PageOptionsDto,
   ): Promise<PaginatedResult<UserResponseDto>> {

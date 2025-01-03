@@ -11,7 +11,7 @@ import {
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
-import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
 import { PaginatedResult } from 'src/common/types/response';
 import { BookResponseDto } from './dto/retrieve-book';
@@ -40,6 +40,10 @@ export class BookController {
     required: false,
   })
   @ApiPaginationQuery()
+  @ApiResponse({
+    status: 200,
+    type: BookResponseDto
+  })
   async searchBooks(
     @Query() pageOptionsDto: PageOptionsDto,
     @Query('title') title?: string,

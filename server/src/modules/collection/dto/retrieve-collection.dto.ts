@@ -1,9 +1,15 @@
 export class RetrieveCollectionDto {
-  readonly id: number;
+  readonly user_id: number;
 }
 
 export class UserCollectionResponseDto {
-  id: number;
+  constructor(data: Partial<UserCollectionResponseDto>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
+
+  user_id: number;
   username: string;
   serie_name: string;
   book_number: number;

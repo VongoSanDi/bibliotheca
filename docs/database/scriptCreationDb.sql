@@ -202,6 +202,24 @@ CREATE TABLE COLLECTION_VOLUME (
     FOREIGN KEY (volume_id) REFERENCES VOLUME(id) ON DELETE CASCADE
 );
 
+CREATE TABLE BOOK_NAME_TRANSLATION (
+    id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    book_id BIGINT UNSIGNED NOT NULL,
+    language_id TINYINT UNSIGNED NOT NULL,
+    translated_title VARCHAR(255) NOT NULL,
+    FOREIGN KEY (book_id) REFERENCES BOOK(id),
+    FOREIGN KEY (language_id) REFERENCES LANGUAGE(id)
+);
+
+CREATE TABLE SERIE_NAME_TRANSLATION (
+    id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    serie_id BIGINT UNSIGNED NOT NULL,
+    language_id TINYINT UNSIGNED NOT NULL,
+    translated_title VARCHAR(255) NOT NULL,
+    FOREIGN KEY (serie_id) REFERENCES SERIE(id),
+    FOREIGN KEY (language_id) REFERENCES LANGUAGE(id),
+)
+
 -- Indexes
 CREATE INDEX idx_serie_name ON SERIE(serie_name);
 CREATE INDEX idx_user_username ON USER(username);
@@ -236,24 +254,27 @@ END;
 
 DELIMITER ;
 
+-- Check if the view exist, if the view exist we drop it so we can create a new one
+DROP VIEW IF EXISTS user_collection;
+
 -- Since getting an user collection need a lot of join, i think the best way is to create a VIEW doing the join for me, so i just need to request if from the collection module
 CREATE OR REPLACE VIEW user_collection AS
 SELECT 
-    U.id,
+    U.id AS user_id,
     U.username,
     S.serie_name,
     B.book_number,
-    B.ORIGINAL_TITLE,
-    V.TRANSLATED_TITLE,
-    A.PEN_NAME AS AUTHOR,
-    V.ACQUISITION_DATE,
-    V.ACQUISITION_PRICE,
-    C.CURRENCY_SYMBOL
+    B.original_title,
+    V.translated_title,
+    A.pen_name AS author,
+    V.acquisition_date,
+    V.acquisition_price,
+    C.currency_symbol
 FROM USER U
-JOIN COLLECTION COL ON COL.USER_ID = U.ID
-JOIN COLLECTION_VOLUME CV ON CV.COLLECTION_ID = COL.ID
-JOIN VOLUME V ON V.ID = CV.VOLUME_ID
-JOIN BOOK B ON B.ID = V.BOOK_ID
-JOIN SERIE S ON S.ID = B.SERIE_ID
-JOIN AUTHOR A ON A.ID = S.AUTHOR_ID
-JOIN CURRENCY C ON C.ID = V.CURRENCY_ID;
+JOIN COLLECTION COL ON COL.user_id = U.id
+JOIN COLLECTION_VOLUME CV ON CV.collection_id = COL.id
+JOIN VOLUME V ON V.id = CV.volume_id
+JOIN BOOK B ON B.id = V.book_id
+JOIN SERIE S ON S.id = B.serie_id
+JOIN AUTHOR A ON A.id = S.author_id
+JOIN CURRENCY C ON C.id = V.currency_id;

@@ -9,15 +9,17 @@ import {
   UserCollectionResponseDto,
 } from './dto/retrieve-collection.dto';
 import { ValidateSchema } from 'src/common/utils/validators';
-import { PageMetaDto, PageOptionsDto } from 'src/common/dto/PageOptionsDto';
-import { RetrieveUserCollectionSchema } from './schemas/RetrieveCollectionSchema';
+import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
+import { RetrieveUserCollectionSchema } from './schemas/retrieve-collection-schema';
+import { UserCollectionMapper } from './mappers/collection-mappers';
+import { PageOptionsSchema } from 'src/common/schemas/common';
 
 @Injectable()
 export class CollectionService {
   constructor(
     @InjectRepository(UserCollection)
     private readonly userCollectionRepository: Repository<UserCollection>,
-  ) {}
+  ) { }
 
   create(createCollectionDto: CreateCollectionDto) {
     return 'This action adds a new collection';
@@ -34,27 +36,36 @@ export class CollectionService {
   async findOne(
     dto: RetrieveCollectionDto,
     pageOptionsDto: PageOptionsDto,
-  ): Promise<{ data: UserCollectionResponseDto; meta: PageMetaDto }> {
+  ): Promise<{ results: UserCollectionResponseDto[]; itemCount: number }> {
     try {
       const validateDto = ValidateSchema<RetrieveCollectionDto>(
         RetrieveUserCollectionSchema,
         dto,
       );
-      const { id } = validateDto;
+      const validatePageOptions = ValidateSchema<PageOptionsDto>(
+        PageOptionsSchema,
+        pageOptionsDto,
+      );
+      const { take, skip, order, orderBy } = validatePageOptions;
+
+      const { user_id } = validateDto;
       const [collection, itemCount] =
         await this.userCollectionRepository.findAndCount({
-          where: { id },
-          take: pageOptionsDto.take,
-          skip: pageOptionsDto.skip,
+          where: { user_id },
+          take: take,
+          skip: skip,
+          order: { [orderBy]: order },
         });
 
       if (!collection || itemCount === 0) {
         throw new NotFoundException(
-          `No collection found for user with id ${id}`,
+          `No collection found for user with id ${user_id}`,
         );
       }
-      const pageMetaDto = new PageMetaDto(pageOptionsDto, itemCount);
-      return { collection, pageMetaDto };
+      const collectionMapped = collection.map((collection) =>
+        UserCollectionMapper.toResponseDto(collection),
+      );
+      return { results: collectionMapped, itemCount: itemCount };
     } catch (e) {
       throw e;
     }

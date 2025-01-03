@@ -5,7 +5,7 @@ import { ViewColumn, ViewEntity } from 'typeorm';
 })
 export class UserCollection {
   @ViewColumn()
-  id: number;
+  user_id: number;
 
   @ViewColumn()
   username: string;

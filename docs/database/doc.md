@@ -18,14 +18,18 @@
         7. [Status](#status)
         8. [Author](#author)
         9. [Publisher](#publisher)
+      2. [Main Table](#main_table)
         10. [User](#user)
-        11. [Book](#book)
-        12. [Volume](#volume)
-        13. [Box set](#box_set)
-        14. [Box set book](#box_set_book)
-        15. [Collection](#collection)
-        15. [Collection volume](#collection_volume)
-        16. [Favorites](#favorites)
+        11. [Serie](#serie)
+        12. [Serie name translation](#serie_name_translation)
+        13. [Book](#book)
+        14. [Book name translation](#book_name_translation)
+        15. [Volume](#volume)
+        16. [Box set](#box_set)
+        17. [Box set book](#box_set_book)
+        18. [Collection](#collection)
+        19. [Collection volume](#collection_volume)
+        20. [Favorites](#favorites)
     2. [Views](#views)
         1. [User collection](#user_collection)
 4. [Relationship](#relationship)
@@ -285,6 +289,7 @@ Store the publishers informations
 | 1  | "Glénat"       | "https://www.glenat.com" | 2          |
 | 2  | "Ki_oon"       | "https://www.ki-oon.com" | 2          |
 
+<a id="main_table"></a>
 ## Main tables
 <a id="user"></a>
 ### USER
@@ -356,6 +361,30 @@ Stores the serie details.
 | 1  | "Dragon Ball" | 1         | 2         | 1        | 1            | 1                    | 90                     | 90                       | 1990-06-11             | 2007-10-27           | "durago ball" |
 | 2  | "One Piece"   | 2         | 1         | 1        | 2            | 1                    | 110                    | 108                      | 1999-01-17             |                      | "one pisu"    |
 
+<a id="serie_name_translation"></a>
+### SERIE_NAME_TRANSLATION
+#### Description
+Translate the serie title in the different available language
+
+#### Columns
+| Name              | Type               | NULL | Default            |Description                     |
+|-------------------|--------------------|------|--------------------|--------------------------------|
+| id                | BIGINT UNSIGNED    | No   | AUTO_INCREMENT     | Primary key                    |
+| serie_id          | BIGINT UNSIGNED    | No   | No                 | Id of the reference serie      |
+| language_id       | TINYINT UNSIGNED   | No   | No                 | Id of the language             |
+| translated_title  | VARCHAR(255)       | No   | No                 | Translated title of the serie  |
+
+#### Contraints
+- Primary Key: id
+- Foreign Key: serie_id -> SERIE.id, language_id -> LANGUAGE.id
+
+#### Example
+| id | serie_id | language_id | translated_title |
+|----|----------|-------------|------------------|
+| 1  | 1        | 1           | "Dragon Ball"    |
+| 2  | 1        | 2           | "Dragon Ball"    |
+| 3  | 2        | 1           | "One Piece"      |
+
 <a id="book"></a>
 ### BOOK
 #### Description
@@ -395,10 +424,34 @@ Store the book informations, this table contains the common informations of the 
 | 1  | 9784088511699 | 1        | "ドラゴンボール 1" | 1                    | 1           | 1       | 2         | 1            | 1          | 1998-08-17   | 199           | 2           | 176        | "http"    | "blabla"
 | 2  | 9784088511705 | 2        | "ONE PIECE 1"      | 1                    | 1           | 1       | 1         | 1            | 1          | 1999-01-16   | 199           | 2           | 153        | "http"    | "blabla"
 
+<a id="book_name_translation"></a>
+### BOOK_NAME_TRANSLATION
+#### Description
+Translate the book title in the different available language
+
+#### Columns
+| Name              | Type               | NULL | Default            |Description                     |
+|-------------------|--------------------|------|--------------------|--------------------------------|
+| id                | BIGINT UNSIGNED    | No   | AUTO_INCREMENT     | Primary key                    |
+| book_id           | BIGINT UNSIGNED    | No   | No                 | Id of the reference book       |
+| language_id       | TINYINT UNSIGNED   | No   | No                 | Id of the language             |
+| translated_title  | VARCHAR(255)       | No   | No                 | Translated title of the book   |
+
+#### Contraints
+- Primary Key: id
+- Foreign Key: book_id -> BOOK.id, language_id -> LANGUAGE.id
+
+#### Example
+| id | book_id | language_id | translated_title |
+|----|---------|-------------|------------------|
+| 1  | 1       | 1           | "Dragon Ball 1"  |
+| 2  | 1       | 2           | "Dragon Ball 1"  |
+| 3  | 2       | 1           | "One Piece 1"    |
+
 <a id="volume"></a>
 ### VOLUME
 #### Description
-Store the volumes informations, it contains the specific, meaning local informations of the volumes
+Store the volumes informations, it contains the specific country local informations of the volumes
 
 #### Columns
 | Name              | Type               | NULL | Default            |Description                     |
