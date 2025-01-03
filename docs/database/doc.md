@@ -21,9 +21,9 @@
       2. [Main Table](#main_table)
         10. [User](#user)
         11. [Serie](#serie)
-        12. [Serie name translation](#serie_name_translation)
+        12. [Serie title translation](#serie_title_translation)
         13. [Book](#book)
-        14. [Book name translation](#book_name_translation)
+        14. [Book title translation](#book_title_translation)
         15. [Volume](#volume)
         16. [Box set](#box_set)
         17. [Box set book](#box_set_book)
@@ -361,8 +361,8 @@ Stores the serie details.
 | 1  | "Dragon Ball" | 1         | 2         | 1        | 1            | 1                    | 90                     | 90                       | 1990-06-11             | 2007-10-27           | "durago ball" |
 | 2  | "One Piece"   | 2         | 1         | 1        | 2            | 1                    | 110                    | 108                      | 1999-01-17             |                      | "one pisu"    |
 
-<a id="serie_name_translation"></a>
-### SERIE_NAME_TRANSLATION
+<a id="serie_title_translation"></a>
+### SERIE_TITLE_TRANSLATION
 #### Description
 Translate the serie title in the different available language
 
@@ -424,8 +424,8 @@ Store the book informations, this table contains the common informations of the 
 | 1  | 9784088511699 | 1        | "ドラゴンボール 1" | 1                    | 1           | 1       | 2         | 1            | 1          | 1998-08-17   | 199           | 2           | 176        | "http"    | "blabla"
 | 2  | 9784088511705 | 2        | "ONE PIECE 1"      | 1                    | 1           | 1       | 1         | 1            | 1          | 1999-01-16   | 199           | 2           | 153        | "http"    | "blabla"
 
-<a id="book_name_translation"></a>
-### BOOK_NAME_TRANSLATION
+<a id="book_title_translation"></a>
+### BOOK_TITLE_TRANSLATION
 #### Description
 Translate the book title in the different available language
 
