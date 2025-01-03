@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import {
@@ -27,78 +27,59 @@ export class BookService {
     return 'This action adds a new book';
   }
 
-  async findByIsbn(
-    dto: RetrieveBookByIsbnDto,
-    pageOptionsDto: PageOptionsDto,
-  ): Promise<{ results: BookResponseDto[]; itemCount: number }> {
-    try {
-      const validateDto = ValidateSchema<RetrieveBookByIsbnDto>(
-        BookByIsbnResponseSchema,
-        dto,
-      );
-      const { isbn } = validateDto;
-      const validatePageOptions = ValidateSchema<PageOptionsDto>(
-        PageOptionsSchema,
-        pageOptionsDto,
-      );
-      const { take, skip, order, orderBy } = validatePageOptions;
+  async findByIsbn(isbn: string): Promise<BookResponseDto> {
+    const validatedDto = ValidateSchema<RetrieveBookByIsbnDto>(
+      BookByIsbnResponseSchema,
+      isbn,
+    );
+    const result = await this.bookRepository.findOneBy({
+      isbn: validatedDto.isbn,
+    });
 
-      const [books, itemCount] = await this.bookRepository.findAndCount({
-        where: { isbn },
-        take: take,
-        skip: skip,
-        order: { [orderBy]: order },
-      });
-      const booksMapped = books.map((book) => BookMapper.toResponseDto(book));
-
-      return {
-        results: booksMapped,
-        itemCount,
-      };
-    } catch (e) {
-      throw e;
+    if (!result) {
+      throw new NotFoundException(
+        `Book with ISBN ${validatedDto.isbn} not found`,
+      );
     }
+
+    return BookMapper.toResponseDto(result);
   }
 
   async findByFilters(
     dto: RetrieveBookByFiltersDto,
     pageOptionsDto: PageOptionsDto,
   ): Promise<{ results: BookResponseDto[]; itemCount: number }> {
-    try {
-      const validateDto = ValidateSchema<RetrieveBookByFiltersDto>(
-        RetrieveBookByFiltersSchema,
-        dto,
-      );
-      const { title, author_id } = validateDto;
-      const validatePageOptions = ValidateSchema<PageOptionsDto>(
-        PageOptionsSchema,
-        pageOptionsDto,
-      );
-      const { take, skip, order, orderBy } = validatePageOptions;
+    const validatedDto = ValidateSchema<RetrieveBookByFiltersDto>(
+      RetrieveBookByFiltersSchema,
+      dto,
+    );
+    const { title, author_id } = validatedDto;
+    const validatedPageOptions = ValidateSchema<PageOptionsDto>(
+      PageOptionsSchema,
+      pageOptionsDto,
+    );
+    const { take, skip, order, orderBy } = validatedPageOptions;
 
-      // We want to query one column, the user must choose which one via the param, if he send a title we will search only in the title column
-      const whereCondition: any = {};
-      if (title) {
-        whereCondition.original_title = ILike(`%${title}%`);
-      } else if (author_id) {
-        whereCondition.author_id = ILike(`%${author_id}%`);
-      }
-      console.log('where', whereCondition);
-
-      const [books, itemCount] = await this.bookRepository.findAndCount({
-        where: whereCondition,
-        take: take,
-        skip: skip,
-        order: { [orderBy]: order },
-      });
-      const booksMapped = books.map((book) => BookMapper.toResponseDto(book));
-      return {
-        results: booksMapped,
-        itemCount,
-      };
-    } catch (e) {
-      throw e;
+    // We want to query one column, the user must choose which one via the param, if he send a title we will search only in the title column
+    const whereCondition: any = {};
+    if (title) {
+      whereCondition.original_title = ILike(`%${title}%`);
+    } else if (author_id) {
+      whereCondition.author_id = ILike(`%${author_id}%`);
     }
+    console.log('where', whereCondition);
+
+    const [books, itemCount] = await this.bookRepository.findAndCount({
+      where: whereCondition,
+      take: take,
+      skip: skip,
+      order: { [orderBy]: order },
+    });
+    const booksMapped = books.map((book) => BookMapper.toResponseDto(book));
+    return {
+      results: booksMapped,
+      itemCount,
+    };
   }
 
   findOne(id: number) {

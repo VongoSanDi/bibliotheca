@@ -11,7 +11,12 @@ import {
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
-import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
 import { PaginatedResult } from 'src/common/types/response';
 import { BookResponseDto } from './dto/retrieve-book';
@@ -19,7 +24,7 @@ import { ApiPaginationQuery } from 'src/common/decorators/pagination.decorator';
 
 @Controller('book')
 export class BookController {
-  constructor(private readonly bookService: BookService) { }
+  constructor(private readonly bookService: BookService) {}
 
   @Post()
   create(@Body() createBookDto: CreateBookDto) {
@@ -42,7 +47,7 @@ export class BookController {
   @ApiPaginationQuery()
   @ApiResponse({
     status: 200,
-    type: BookResponseDto
+    type: BookResponseDto,
   })
   async searchBooks(
     @Query() pageOptionsDto: PageOptionsDto,
@@ -68,24 +73,8 @@ export class BookController {
   @Get('isbn/:isbn')
   @ApiBearerAuth('bearer')
   @ApiOperation({ summary: 'Retrieve a book by his ISBN' })
-  @ApiPaginationQuery()
-  async searchBook(
-    @Param('isbn') isbn: string,
-    @Query() pageOptionsDto: PageOptionsDto,
-  ): Promise<PaginatedResult<BookResponseDto>> {
-    const dto = {
-      isbn: isbn,
-    };
-    const { results, itemCount } = await this.bookService.findByIsbn(
-      dto,
-      pageOptionsDto,
-    );
-
-    return {
-      results,
-      pageOptionsDto,
-      itemCount,
-    };
+  async searchBook(@Param('isbn') isbn: string): Promise<BookResponseDto> {
+    return await this.bookService.findByIsbn(isbn);
   }
 
   @Get(':id')

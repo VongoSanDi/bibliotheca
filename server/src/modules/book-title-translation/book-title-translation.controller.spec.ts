@@ -11,7 +11,9 @@ describe('BookTitleTranslationController', () => {
       providers: [BookTitleTranslationService],
     }).compile();
 
-    controller = module.get<BookTitleTranslationController>(BookTitleTranslationController);
+    controller = module.get<BookTitleTranslationController>(
+      BookTitleTranslationController,
+    );
   });
 
   it('should be defined', () => {

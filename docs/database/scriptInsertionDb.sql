@@ -92,12 +92,12 @@ INSERT INTO BOOK (id, isbn, original_title, original_language_id, book_number, s
    'https://example.com/onepiece-1.jpg', 'Premier tome de One Piece', 1, 1);
 
 -- Volumes (exemplaires physiques)
-INSERT INTO VOLUME (id, book_id, language_id, translated_title, acquisition_price, currency_id,
+INSERT INTO VOLUME (id, book_id, language_id, acquisition_price, currency_id,
                    acquisition_date, created_by, updated_by) VALUES
-(1, 1, 1, 'Dragon Ball Tome 1', 6.90, 1, '2023-01-15', 1, 1),
-(2, 1, 1, 'Dragon Ball Tome 1', 6.90, 1, '2023-01-15', 1, 1),
-(3, 2, 1, 'Dragon Ball Tome 2', 6.90, 1, '2023-02-01', 1, 1),
-(4, 3, 1, 'One Piece Tome 1', 6.90, 1, '2023-03-10', 1, 1);
+(1, 1, 1, 6.90, 1, '2023-01-15', 1, 1),
+(2, 1, 1, 6.90, 1, '2023-01-15', 1, 1),
+(3, 2, 1, 6.90, 1, '2023-02-01', 1, 1),
+(4, 3, 1, 6.90, 1, '2023-03-10', 1, 1);
 
 -- Box Sets
 INSERT INTO BOX_SET (id, isbn, original_box_set_title, language_id, serie_id, author_id, publisher_id,
@@ -121,5 +121,16 @@ INSERT INTO COLLECTION_VOLUME (collection_id, volume_id) VALUES
 (1, 3),  -- John possède Dragon Ball tome 2
 (2, 2),  -- Jane possède Dragon Ball tome 1
 (2, 4);  -- Jane possède One Piece tome 1
+
+INSERT INTO BOOK_TITLE_TRANSLATION(id, book_id, translated_title, language_id) VALUES
+(1, 1, 'Dragon Ball 1', 1),
+(2, 2, 'Dragon Ball 2', 3),
+(3, 1, 'One Piece 1', 1);
+
+INSERT INTO SERIE_TITLE_TRANSLATION(id, serie_id, translated_title, language_id) VALUES
+(1, 1, 'Dragon Ball', 1),
+(2, 2, 'One Piece', 1),
+(3, 2, 'One Piece', 2),
+(4, 3, 'My Hero Academia', 1);
 
 COMMIT;
