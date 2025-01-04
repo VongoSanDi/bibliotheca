@@ -23,20 +23,21 @@ export class BookTitleTranslationService {
   }
 
   async findOneBookTitleTranslation(
-    id: number,
+    dto: RetrieveBookTitleTranslationDto,
   ): Promise<BookTitleTranslationResponseDto> {
     const validatedDto = ValidateSchema<RetrieveBookTitleTranslationDto>(
       BookTitleTranslationSchema,
-      id,
+      dto,
     );
 
     const result = await this.bookTitleTranslationRepository.findOneBy({
-      id: validatedDto.id,
+      language_id: validatedDto.language_id,
+      book_id: validatedDto.book_id,
     });
 
     if (!result) {
       throw new NotFoundException(
-        `Book with ISBN ${validatedDto.id} not found`,
+        `Book with ID ${validatedDto.book_id} and with the language ID ${validatedDto.language_id} not found`,
       );
     }
     return BookTitleTranslationMapper.toResponseDto(result);

@@ -1,8 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class RetrieveBookTitleTranslationDto {
   @ApiProperty()
-  id: number;
+  language_id: number;
+
+  @ApiPropertyOptional()
+  book_id: number;
 }
 
 export class BookTitleTranslationResponseDto {

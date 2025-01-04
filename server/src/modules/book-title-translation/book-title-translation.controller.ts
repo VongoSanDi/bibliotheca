@@ -6,12 +6,21 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { BookTitleTranslationService } from './book-title-translation.service';
 import { CreateBookTitleTranslationDto } from './dto/create-book-title-translation.dto';
 import { UpdateBookTitleTranslationDto } from './dto/update-book-title-translation.dto';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { BookTitleTranslationResponseDto } from './dto/retrieve-book-title-translation.dto';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+} from '@nestjs/swagger';
+import {
+  BookTitleTranslationResponseDto,
+  RetrieveBookTitleTranslationDto,
+} from './dto/retrieve-book-title-translation.dto';
 
 @Controller('book-title-translation')
 export class BookTitleTranslationController {
@@ -26,15 +35,32 @@ export class BookTitleTranslationController {
     );
   }
 
-  @Get(':id')
+  @Get(':languageId/:bookId')
   @ApiBearerAuth('bearer')
-  @ApiOperation({ summary: 'Retrive the translated title of a book' })
+  @ApiOperation({ summary: 'Retrieve the translated title of a book' })
   @ApiResponse({ status: 200, type: BookTitleTranslationResponseDto })
+  @ApiParam({
+    name: 'languageId',
+    required: true,
+    type: Number,
+    description: 'Language ID',
+  })
+  @ApiParam({
+    name: 'bookId',
+    required: true,
+    type: Number,
+    description: 'Book ID',
+  })
   async findOneBookTitleTranslattion(
-    @Param('id') id: number,
+    @Param('languageId', ParseIntPipe) languageId: number,
+    @Param('bookId', ParseIntPipe) bookId: number,
   ): Promise<BookTitleTranslationResponseDto> {
+    const dto: RetrieveBookTitleTranslationDto = {
+      language_id: languageId,
+      book_id: bookId,
+    };
     return await this.bookTitleTranslationService.findOneBookTitleTranslation(
-      +id,
+      dto,
     );
   }
 
