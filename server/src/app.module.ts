@@ -21,6 +21,7 @@ import { StatusModule } from './modules/status/status.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CollectionVolumeModule } from './modules/collection-volume/collection-volume.module';
 import { BookTitleTranslationModule } from './modules/book-title-translation/book-title-translation.module';
+import { SerieTitleTranslationModule } from './modules/serie-title-translation/serie-title-translation.module';
 import ormconfig from './db/ormconfig';
 
 @Module({
@@ -45,6 +46,7 @@ import ormconfig from './db/ormconfig';
     AuthModule,
     CollectionVolumeModule,
     BookTitleTranslationModule,
+    SerieTitleTranslationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
