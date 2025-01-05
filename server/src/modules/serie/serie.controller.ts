@@ -37,20 +37,20 @@ export class SerieController {
     return this.serieService.findOne(+id);
   }
 
-  @Get(':title')
+  @Get('title/:serie_title')
   @ApiBearerAuth('bearer')
   @ApiOperation({ summary: 'Retrieve a serie by the title' })
   @ApiResponse({ status: 200, type: SerieResponseDto })
   @ApiParam({
-    name: 'title',
+    name: 'serie_title',
     required: true,
     type: String,
     description: 'Serie title',
   })
   async findOneByTitle(
-    @Param('title') title: string,
+    @Param('serie_title') serie_title: string,
   ): Promise<SerieResponseDto> {
-    return await this.serieService.findOneByTitle(title);
+    return await this.serieService.findOneByTitle(serie_title);
   }
 
   @Patch(':id')
