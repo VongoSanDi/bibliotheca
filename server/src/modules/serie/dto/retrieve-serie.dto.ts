@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class RetrieveSerieByTitleDto {
   @ApiProperty()
-  title: string;
+  serie_title: string;
 }
 
 export class SerieResponseDto {

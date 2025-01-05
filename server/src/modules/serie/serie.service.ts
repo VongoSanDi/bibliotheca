@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSerieDto } from './dto/create-serie.dto';
 import { UpdateSerieDto } from './dto/update-serie.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Serie } from './entities/serie.entity';
 import {
   RetrieveSerieByTitleDto,
@@ -30,19 +30,19 @@ export class SerieService {
     return `This action returns a #${id} serie`;
   }
 
-  async findOneByTitle(title: string): Promise<SerieResponseDto> {
-    const validatedDto = ValidateSchema<RetrieveSerieByTitleDto>(
+  async findOneByTitle(serie_title: string): Promise<SerieResponseDto> {
+    const validatedDto = ValidateSchema<string>(
       SerieByTitleResponseSchema,
-      title,
+      serie_title,
     );
 
     const result = await this.serieRepository.findOneBy({
-      serie_title: validatedDto.title,
+      serie_title: ILike(`%${validatedDto}%`),
     });
 
     if (!result) {
       throw new NotFoundException(
-        `Serie with title ${validatedDto.title} not found`,
+        `Serie with title ${validatedDto} not found`,
       );
     }
 
