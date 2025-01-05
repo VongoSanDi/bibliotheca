@@ -1,6 +1,7 @@
 import { ApiError } from "../../common/ApiError";
 import { SearchBooksParams } from "../../types/apis/book";
 
+
 export const getBooks = async ({ title, author, page, limit }: SearchBooksParams = {}) => {
   const BASE_URL = import.meta.env.VITE_SERVER_URL;
   // TODO remove the hard written token and retrieve it from the localStorage
