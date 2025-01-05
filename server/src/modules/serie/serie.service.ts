@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { Serie } from './entities/serie.entity';
 import {
-  RetrieveSerieByTitleDto,
   SerieResponseDto,
 } from './dto/retrieve-serie.dto';
 import { ValidateSchema } from 'src/common/utils/validators';

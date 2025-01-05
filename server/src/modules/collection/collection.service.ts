@@ -19,7 +19,7 @@ export class CollectionService {
   constructor(
     @InjectRepository(UserCollection)
     private readonly userCollectionRepository: Repository<UserCollection>,
-  ) {}
+  ) { }
 
   create(createCollectionDto: CreateCollectionDto) {
     return 'This action adds a new collection';
@@ -35,17 +35,17 @@ export class CollectionService {
     pageOptionsDto: PageOptionsDto,
   ): Promise<{ results: UserCollectionResponseDto[]; itemCount: number }> {
     try {
-      const validateDto = ValidateSchema<string>(
+      const validatedDto = ValidateSchema<RetrieveCollectionDto>(
         RetrieveUserCollectionSchema,
         dto,
       );
-      const validatePageOptions = ValidateSchema<PageOptionsDto>(
+      const validatedPageOptions = ValidateSchema<PageOptionsDto>(
         PageOptionsSchema,
         pageOptionsDto,
       );
-      const { take, skip, order, orderBy } = validatePageOptions;
+      const { take, skip, order, orderBy } = validatedPageOptions;
 
-      const { user_id } = validateDto;
+      const { user_id } = validatedDto;
       const [collection, itemCount] =
         await this.userCollectionRepository.findAndCount({
           where: { user_id },

@@ -1,6 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/swcrc",
   "sourceMaps": true,
+    "module": {
+      "type": "es6",
+      "strict": true,
+      "strictMode": true,
+      "noInterop": false,
+      "resolveFully": true
+  },
   "jsc": {
     "parser": {
       "syntax": "typescript",
@@ -12,6 +19,7 @@
       "legacyDecorator": true,
       "decoratorMetadata": true
     },
+    "keepClassNames": true,
     "baseUrl": "./"
   },
   "minify": false
