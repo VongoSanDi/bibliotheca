@@ -76,7 +76,7 @@ CREATE TABLE PUBLISHER (
 
 CREATE TABLE SERIE (
     id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    serie_name VARCHAR(255) NOT NULL COMMENT 'Original title of the serie',
+    serie_title VARCHAR(255) NOT NULL COMMENT 'Original title of the serie',
     author_id MEDIUMINT UNSIGNED NOT NULL,
     status_id TINYINT UNSIGNED NOT NULL,
     genre_id TINYINT UNSIGNED NOT NULL,
@@ -220,7 +220,7 @@ CREATE TABLE SERIE_TITLE_TRANSLATION (
 );
 
 -- Indexes
-CREATE INDEX idx_serie_name ON SERIE(serie_name);
+CREATE INDEX idx_serie_name ON SERIE(serie_title);
 CREATE INDEX idx_user_username ON USER(username);
 CREATE INDEX idx_book_author ON BOOK(author_id);
 CREATE INDEX idx_book_publisher ON BOOK(publisher_id);
@@ -261,7 +261,7 @@ CREATE VIEW user_collection AS
 SELECT 
     U.id AS user_id,
     U.username,
-    S.serie_name,
+    S.serie_title,
     B.book_number,
     B.original_title,
     BTT.translated_title,

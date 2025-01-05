@@ -11,7 +11,7 @@ export class UserCollectionResponseDto {
 
   user_id: number;
   username: string;
-  serie_name: string;
+  serie_title: string;
   book_number: number;
   original_title: string;
   translated_title: string;

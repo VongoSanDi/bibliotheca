@@ -18,18 +18,18 @@
         7. [Status](#status)
         8. [Author](#author)
         9. [Publisher](#publisher)
-      2. [Main Table](#main_table)
-        10. [User](#user)
-        11. [Serie](#serie)
-        12. [Serie title translation](#serie_title_translation)
-        13. [Book](#book)
-        14. [Book title translation](#book_title_translation)
-        15. [Volume](#volume)
-        16. [Box set](#box_set)
-        17. [Box set book](#box_set_book)
-        18. [Collection](#collection)
-        19. [Collection volume](#collection_volume)
-        20. [Favorites](#favorites)
+    2. [Main Table](#main_table)
+      10. [User](#user)
+      11. [Serie](#serie)
+      12. [Serie title translation](#serie_title_translation)
+      13. [Book](#book)
+      14. [Book title translation](#book_title_translation)
+      15. [Volume](#volume)
+      16. [Box set](#box_set)
+      17. [Box set book](#box_set_book)
+      18. [Collection](#collection)
+      19. [Collection volume](#collection_volume)
+      20. [Favorites](#favorites)
     2. [Views](#views)
         1. [User collection](#user_collection)
 4. [Relationship](#relationship)
@@ -335,7 +335,7 @@ Stores the serie details.
 | Name                     | Type               | NULL | Default            |Description                    |
 |--------------------------|--------------------|------|--------------------|-------------------------------|
 | id                       | BIGINT UNSIGNED    | No   | AUTO_INCREMENT     | Primary key                   |
-| serie_name               | VARCHAR(255)       | No   | No                 | Name of the serie             |
+| serie_title               | VARCHAR(255)       | No   | No                 | Name of the serie             |
 | author_id                | MEDIUMINT UNSIGNED | No   | No                 | Id of the author              |
 | status_id                | TINYINT UNSIGNED   | No   | No                 | Id of the status              |
 | genre_id                 | TINYINT UNSIGNED   | Yes  | No                 | Id of the genre               |
@@ -356,7 +356,7 @@ Stores the serie details.
 - Foreign Key: author_id -> AUTHOR.id, status_id -> STATUS.id, genre_id -> GENRE.id, publisher_id -> PUBLISHER.id, original_language_id -> LANGUAGE.id
 
 #### Example
-| id | serie_name    | author_id | status_id | genre_id | publisher_id | original_language_id | original_volumes_count | translated_volumes_count | publication_start_date | publication_end_date | description   |
+| id | serie_title    | author_id | status_id | genre_id | publisher_id | original_language_id | original_volumes_count | translated_volumes_count | publication_start_date | publication_end_date | description   |
 |----|---------------|-----------|-----------|----------|--------------|----------------------|------------------------|--------------------------|------------------------|----------------------|---------------|
 | 1  | "Dragon Ball" | 1         | 2         | 1        | 1            | 1                    | 90                     | 90                       | 1990-06-11             | 2007-10-27           | "durago ball" |
 | 2  | "One Piece"   | 2         | 1         | 1        | 2            | 1                    | 110                    | 108                      | 1999-01-17             |                      | "one pisu"    |
@@ -588,7 +588,7 @@ This view provide a consolidated view of the user collection
 #### Columns
 - id (USER.id)
 - username (USER.username)
-- serie_name (SERIE.serie_name)
+- serie_title (SERIE.serie_name)
 - book_number (BOOK.book_number)
 - original_title (BOOK.original_title)
 - translated_title (VOLUME.translated_title)

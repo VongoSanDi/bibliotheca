@@ -26,7 +26,7 @@ import {
 export class BookTitleTranslationController {
   constructor(
     private readonly bookTitleTranslationService: BookTitleTranslationService,
-  ) {}
+  ) { }
 
   @Post()
   create(@Body() createBookTitleTranslationDto: CreateBookTitleTranslationDto) {

@@ -8,7 +8,7 @@ export class UserCollectionMapper {
     return new UserCollectionResponseDto({
       user_id: userCollection.user_id,
       username: userCollection.username,
-      serie_name: userCollection.serie_name,
+      serie_title: userCollection.serie_title,
       book_number: userCollection.book_number,
       translated_title: userCollection.translated_title,
       author: userCollection.author,

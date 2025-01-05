@@ -70,7 +70,7 @@ INSERT INTO PUBLISHER (id, publisher_name, website, country_id) VALUES
 (3, 'Ki-oon', 'https://www.ki-oon.com', 1);
 
 -- Séries
-INSERT INTO SERIE (id, serie_name, author_id, status_id, genre_id, publisher_id, original_language_id,
+INSERT INTO SERIE (id, serie_title, author_id, status_id, genre_id, publisher_id, original_language_id,
                   original_volumes_count, translated_volumes_count, publication_start_date, publication_end_date,
                   description, created_by, updated_by) VALUES
 (1, 'Dragon Ball', 1, 2, 1, 2, 2, 42, 42, '1984-11-20', '1995-05-23',

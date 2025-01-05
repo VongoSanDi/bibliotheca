@@ -11,7 +11,7 @@ export class UserCollection {
   username: string;
 
   @ViewColumn()
-  serie_name: string;
+  serie_title: string;
 
   @ViewColumn()
   book_number: number;
