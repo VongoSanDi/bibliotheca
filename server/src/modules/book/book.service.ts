@@ -28,18 +28,14 @@ export class BookService {
   }
 
   async findByIsbn(isbn: string): Promise<BookResponseDto> {
-    const validatedDto = ValidateSchema<RetrieveBookByIsbnDto>(
-      BookByIsbnResponseSchema,
-      isbn,
-    );
+    const validatedDto = ValidateSchema<string>(BookByIsbnResponseSchema, isbn);
+
     const result = await this.bookRepository.findOneBy({
-      isbn: validatedDto.isbn,
+      isbn: validatedDto,
     });
 
     if (!result) {
-      throw new NotFoundException(
-        `Book with ISBN ${validatedDto.isbn} not found`,
-      );
+      throw new NotFoundException(`Book with ISBN ${validatedDto} not found`);
     }
 
     return BookMapper.toResponseDto(result);
@@ -67,7 +63,6 @@ export class BookService {
     } else if (author_id) {
       whereCondition.author_id = ILike(`%${author_id}%`);
     }
-    console.log('where', whereCondition);
 
     const [books, itemCount] = await this.bookRepository.findAndCount({
       where: whereCondition,

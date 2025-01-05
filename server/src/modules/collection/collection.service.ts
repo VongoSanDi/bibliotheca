@@ -19,17 +19,14 @@ export class CollectionService {
   constructor(
     @InjectRepository(UserCollection)
     private readonly userCollectionRepository: Repository<UserCollection>,
-  ) { }
+  ) {}
 
   create(createCollectionDto: CreateCollectionDto) {
     return 'This action adds a new collection';
   }
 
   async findAll(): Promise<UserCollectionResponseDto[]> {
-    // return `This action returns all collection`;
     const response = await this.userCollectionRepository.find();
-    console.log('findAll.response', response);
-
     return response;
   }
 
@@ -38,7 +35,7 @@ export class CollectionService {
     pageOptionsDto: PageOptionsDto,
   ): Promise<{ results: UserCollectionResponseDto[]; itemCount: number }> {
     try {
-      const validateDto = ValidateSchema<RetrieveCollectionDto>(
+      const validateDto = ValidateSchema<string>(
         RetrieveUserCollectionSchema,
         dto,
       );

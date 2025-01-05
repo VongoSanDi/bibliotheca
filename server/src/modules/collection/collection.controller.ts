@@ -19,7 +19,7 @@ import { PaginatedResult } from 'src/common/types/response';
 
 @Controller('collection')
 export class CollectionController {
-  constructor(private readonly collectionService: CollectionService) { }
+  constructor(private readonly collectionService: CollectionService) {}
 
   @Post()
   create(@Body() createCollectionDto: CreateCollectionDto) {
@@ -28,8 +28,6 @@ export class CollectionController {
 
   @Get()
   async findAll() {
-    console.log('findALl');
-
     return await this.collectionService.findAll();
   }
 
