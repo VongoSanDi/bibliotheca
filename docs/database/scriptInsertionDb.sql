@@ -1,3 +1,12 @@
+{
+  "username": "test",
+  "password": "test",
+  "email": "test@test.com",
+  "country_id": 1,
+  "birth_date": "2025-01-05",
+  "gender_id": 1
+}
+
 -- Début de la transaction
 START TRANSACTION;
 
@@ -116,11 +125,11 @@ INSERT INTO COLLECTION (id, user_id, name, created_by, updated_by) VALUES
 (2, 3, 'Collection de Jane', 1, 1);
 
 -- Volumes dans les collections
-INSERT INTO COLLECTION_VOLUME (collection_id, volume_id) VALUES
-(1, 1),  -- John possède Dragon Ball tome 1
-(1, 3),  -- John possède Dragon Ball tome 2
-(2, 2),  -- Jane possède Dragon Ball tome 1
-(2, 4);  -- Jane possède One Piece tome 1
+INSERT INTO COLLECTION_VOLUME (collection_id, volume_id, added_date) VALUES
+(1, 1, '2024-12-25'),  -- John possède Dragon Ball tome 1
+(1, 3, '2025-01-01'),  -- John possède Dragon Ball tome 2
+(2, 2, '2021-09-14'),  -- Jane possède Dragon Ball tome 1
+(2, 4, '2002-07-17');  -- Jane possède One Piece tome 1
 
 INSERT INTO BOOK_TITLE_TRANSLATION(id, book_id, translated_title, language_id) VALUES
 (1, 1, 'Dragon Ball 1', 1),

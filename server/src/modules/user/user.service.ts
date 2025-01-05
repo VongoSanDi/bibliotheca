@@ -26,7 +26,7 @@ import { CreateUserSchema, RetrieveUserSchema } from './schemas/user.schema';
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   /*
    *
@@ -35,7 +35,6 @@ export class UserService {
     dto: RetrieveUserDto,
   ): Promise<UserResponseDto | UserValidateDto> {
     try {
-      console.log('dto', dto);
       const validatedDto = ValidateSchema<RetrieveUserDto>(
         RetrieveUserSchema,
         dto,
@@ -120,7 +119,6 @@ export class UserService {
         param: username,
         includePassword: true,
       })) as UserValidateDto;
-      console.log('clg', user);
 
       if (!user) {
         throw new NotFoundException('User not found');

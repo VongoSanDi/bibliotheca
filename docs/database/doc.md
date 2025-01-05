@@ -306,7 +306,7 @@ Stores user account informations
 | birth_date      | DATE               | Yes  | No                 | Birth date of the user      |
 | gender_id       | TINYINT UNSIGNED   | Yes  | No                 | Gender of the user          |
 | country_id      | TINYINT UNSIGNED   | No   | No                 | Country of the user         |
-| last_login      | DATE               | No   | No                 | Last time user logged in    |
+| last_login      | DATE               | No   | CURRENT_DATE       | Last time user logged in    |
 | created_at      | TIMESTAMP          | No   | CURRENCT_TIMESTAMP | Record creation timestamp   |
 | created_by      | MEDIUMINT UNSIGNED | No   | 0                  | User who create the record  |
 | updated_at      | TIMESTAMP          | No   | CURRENCT_TIMESTAMP | Last update timestamp       |

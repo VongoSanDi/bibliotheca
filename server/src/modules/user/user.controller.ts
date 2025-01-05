@@ -21,11 +21,20 @@ import { ApiPaginationQuery } from 'src/common/decorators/pagination.decorator';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Public()
   @Post()
   @ApiOperation({ summary: 'Create user' })
+  @ApiResponse({
+    status: 201,
+    description: 'User successfully created',
+    type: UserResponseDto,
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'Unable de create user - validation error',
+  })
   async create(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
     return await this.userService.create(createUserDto);
   }
@@ -35,7 +44,7 @@ export class UserController {
   @ApiOperation({ summary: 'Retrieve all users' })
   @ApiResponse({
     status: 200,
-    type: UserResponseDto
+    type: UserResponseDto,
   })
   @ApiPaginationQuery()
   async findAll(

@@ -23,10 +23,10 @@ export const CreateUserSchema = z.object({
   email: emailValidation,
   country_id: numberIntValidation,
   birth_date: z.string().date().optional(),
-  gender_id: numberIntValidation.optional(),
+  gender_id: z.number().nonnegative().optional(),
 });
 
 export const RetrieveUserSchema = z.object({
   param: z.union([numberIntValidation, usernameValidation]),
-  includePassword: z.boolean().optional(),
+  includePassword: z.boolean().optional().default(false),
 });
