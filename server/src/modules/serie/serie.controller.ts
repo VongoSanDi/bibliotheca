@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { SerieService } from './serie.service';
 import { CreateSerieDto } from './dto/create-serie.dto';
@@ -14,9 +15,14 @@ import {
   ApiBearerAuth,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiResponse,
 } from '@nestjs/swagger';
 import { SerieResponseDto } from './dto/retrieve-serie.dto';
+import { PaginatedResult } from 'src/common/types/response';
+import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
+import { ApiPaginationQuery } from 'src/common/decorators/pagination.decorator';
+import { QueryTransformPipe } from 'src/common/utils/query-transform.pipe';
 
 @Controller('serie')
 export class SerieController {
@@ -39,18 +45,37 @@ export class SerieController {
 
   @Get('title/:serie_title')
   @ApiBearerAuth('bearer')
-  @ApiOperation({ summary: 'Retrieve a serie by the title' })
-  @ApiResponse({ status: 200, type: SerieResponseDto })
+  @ApiOperation({
+    summary: 'Retrieve series by title',
+    description: 'Search and retrieve series that match the given title with pagination'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Series found successfully',
+    type: SerieResponseDto,
+    isArray: true
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'No series found with the given title'
+  })
   @ApiParam({
     name: 'serie_title',
     required: true,
     type: String,
-    description: 'Serie title',
+    description: 'Full or partial series title to search for'
   })
-  async findOneByTitle(
+  @ApiPaginationQuery()
+  async findByTitle(
     @Param('serie_title') serie_title: string,
-  ): Promise<SerieResponseDto> {
-    return await this.serieService.findOneByTitle(serie_title);
+    @Query(QueryTransformPipe) pageOptionsDto: PageOptionsDto
+  ): Promise<PaginatedResult<SerieResponseDto>> {
+    const { results, itemCount } = await this.serieService.findByTitle(serie_title, pageOptionsDto);
+    return {
+      results,
+      itemCount,
+      pageOptionsDto,
+    };
   }
 
   @Patch(':id')

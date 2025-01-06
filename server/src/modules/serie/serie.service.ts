@@ -10,6 +10,8 @@ import {
 import { ValidateSchema } from 'src/common/utils/validators';
 import { SerieByTitleResponseSchema } from './schemas/serie.schema';
 import { SerieMapper } from './mappers/serie-mapper';
+import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
+import { PageOptionsSchema } from 'src/common/schemas/common';
 
 @Injectable()
 export class SerieService {
@@ -29,23 +31,33 @@ export class SerieService {
     return `This action returns a #${id} serie`;
   }
 
-  async findOneByTitle(serie_title: string): Promise<SerieResponseDto> {
+  async findByTitle(serie_title: string, pageOptionsDto: PageOptionsDto): Promise<{ results: SerieResponseDto[]; itemCount: number }> {
     const validatedDto = ValidateSchema<string>(
       SerieByTitleResponseSchema,
       serie_title,
     );
 
-    const result = await this.serieRepository.findOneBy({
-      serie_title: ILike(`%${validatedDto}%`),
+    const validatedPageOptions = ValidateSchema<PageOptionsDto>(PageOptionsSchema, pageOptionsDto)
+    const { take, skip, order, orderBy } = validatedPageOptions;
+
+    const [series, itemCount] = await this.serieRepository.findAndCount({
+      where: {
+        serie_title: ILike(`%${validatedDto}%`)
+      },
+      take: take,
+      skip: skip,
+      order: { [orderBy]: order },
     });
 
-    if (!result) {
-      throw new NotFoundException(
-        `Serie with title ${validatedDto} not found`,
-      );
+    if (itemCount === 0) {
+      throw new NotFoundException(`No series found with title containing: ${serie_title}`);
     }
 
-    return SerieMapper.toResponseDto(result);
+    const seriesMapped = series.map((serie) => SerieMapper.toResponseDto(serie))
+
+    return {
+      results: seriesMapped, itemCount
+    }
   }
 
   update(id: number, updateSerieDto: UpdateSerieDto) {
