@@ -1,10 +1,10 @@
 # Server
 server/node_modules
 server/*.lock
-server/dist/*
+server/dist/**
 
 # Client
 client/node_modules
 client/*.lock
-client/dist/*
+client/dist/**
 
