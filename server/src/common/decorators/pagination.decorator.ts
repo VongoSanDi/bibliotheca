@@ -4,12 +4,6 @@ import { ApiQuery } from '@nestjs/swagger';
 export const ApiPaginationQuery = () => {
   return applyDecorators(
     ApiQuery({
-      name: 'skip',
-      required: false,
-      description: 'Number of element to skip',
-      type: Number,
-    }),
-    ApiQuery({
       name: 'take',
       required: false,
       description: 'Number of element to return',
@@ -33,7 +27,7 @@ export const ApiPaginationQuery = () => {
       name: 'orderBy',
       required: false,
       description: 'Specify the column on which we want to sort',
-      type: Number,
+      type: String,
     }),
   );
 };
