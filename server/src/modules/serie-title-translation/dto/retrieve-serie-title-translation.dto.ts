@@ -1,11 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class RetrieveSerieTitleTranslationDto {
-  @ApiProperty()
-  language_id: number;
+  @ApiPropertyOptional()
+  language_id?: number;
 
   @ApiPropertyOptional()
-  serie_id: number;
+  serie_id?: number;
+
+  @ApiPropertyOptional()
+  translated_title?: string
 }
 
 export class SerieTitleTranslationResponseDto {

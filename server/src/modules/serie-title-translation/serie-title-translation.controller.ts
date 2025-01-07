@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { SerieTitleTranslationService } from './serie-title-translation.service';
 import { CreateSerieTitleTranslationDto } from './dto/create-serie-title-translation.dto';
@@ -15,12 +16,17 @@ import {
   ApiBearerAuth,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiResponse,
 } from '@nestjs/swagger';
 import {
   RetrieveSerieTitleTranslationDto,
   SerieTitleTranslationResponseDto,
 } from './dto/retrieve-serie-title-translation.dto';
+import { PaginatedResult } from 'src/common/types/response';
+import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
+import { ApiPaginationQuery } from 'src/common/decorators/pagination.decorator';
+import { QueryTransformPipe } from 'src/common/utils/query-transform.pipe';
 
 @Controller('serie-title-translation')
 export class SerieTitleTranslationController {
@@ -37,9 +43,49 @@ export class SerieTitleTranslationController {
     );
   }
 
+  // @Get()
+  // findAll() {
+  //   return this.serieTitleTranslationService.findAll();
+  // }
+
   @Get()
-  findAll() {
-    return this.serieTitleTranslationService.findAll();
+  @ApiBearerAuth('bearer')
+  @ApiOperation({ summary: 'Retrieve the translated title of the series' })
+  @ApiQuery({
+    name: 'serie_id',
+    description: 'The serie id we are looking for',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'translated_title',
+    description: 'Full or partial serie title to search for',
+    required: false,
+  })
+  @ApiPaginationQuery()
+  @ApiResponse({
+    status: 200,
+    type: SerieTitleTranslationResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'No series found with the given parameter'
+  })
+  async findSeries(
+    @Query(QueryTransformPipe) pageOptionsDto: PageOptionsDto,
+    @Query('serie_id') serie_id?: number,
+    @Query('translated_title') translated_title?: string)
+    : Promise<PaginatedResult<SerieTitleTranslationResponseDto>> {
+    const dto = {
+      serie_id,
+      translated_title
+    }
+
+    const { results, itemCount } = await this.serieTitleTranslationService.findSeries(dto, pageOptionsDto)
+    return {
+      results,
+      itemCount,
+      pageOptionsDto
+    }
   }
 
   @Get(':languageId/:serieId')
