@@ -1,17 +1,27 @@
 import { LocalLibraryRounded } from '@mui/icons-material';
-import CustomAutocomplete from './Autocomplete';
-import { getBooks } from '../services/api/book';
 import { useState } from 'react';
-import { Volume } from '../types/components/VolumeDetails';
+import { getBooks } from '../services/api/book.service';
 import { AutocompleteOptions } from '../types/components/Autocomplete';
+import { Volume } from '../types/components/VolumeDetails';
+import CustomAutocomplete from './Autocomplete';
 import VolumeDetails from './VolumeDetails';
+import { FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { SerieTitleTranslation } from '../types/dtos/serie-title-translation.dto';
 const Header = () => {
 
   const [optionsAutocomplete, setOptionsAutocomplete] = useState<AutocompleteOptions[]>([])
+  const [valueRadioButton, setValueRadioButton] = useState<string>("serie")
   const [selectBook, setSelectBook] = useState<Volume | null>(null)
+  const [selectSerieTitleTranslation, setSelectSerieTitleTranslation] = useState<SerieTitleTranslation | null>(null)
+
+  const handleChangeRadioButton = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValueRadioButton((event.target as HTMLInputElement).value);
+  };
 
   const handleSearch = async (value: string) => {
     if (!value) return;
+
+    const series = await getSeriesTitleTranslation({})
 
     const books = await getBooks({ title: value }) //TODO Rework ça pour envoyer le champ title ou author selon le radio button
     const options = books.data.map((book: Volume) => ({
@@ -54,6 +64,18 @@ const Header = () => {
           </div>
           <div>
             <CustomAutocomplete options={optionsAutocomplete} label="Recherche par titre ou auteur" sx={sxAutocomplete} onSearch={handleSearch} onSelect={handleOptionSelect} />
+            <FormControl>
+              <RadioGroup
+                row
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="controlled-radio-buttons-group"
+                value={valueRadioButton}
+                onChange={handleChangeRadioButton}
+              >
+                <FormControlLabel value="serie" control={<Radio />} label="Serie" />
+                <FormControlLabel value="livre" control={<Radio />} label="Livre" />
+              </RadioGroup>
+            </FormControl>
           </div>
           <div className='right-4'>
             <button>

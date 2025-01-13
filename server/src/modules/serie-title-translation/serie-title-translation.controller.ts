@@ -100,7 +100,7 @@ export class SerieTitleTranslationController {
   })
   @ApiParam({
     name: 'serieId',
-    required: true,
+    required: false,
     type: Number,
     description: 'Serie ID',
   })

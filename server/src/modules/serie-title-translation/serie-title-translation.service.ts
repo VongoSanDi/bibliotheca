@@ -7,7 +7,7 @@ import {
 } from './dto/retrieve-serie-title-translation.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SerieTitleTranslation } from './entities/serie-title-translation.entity';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ValidateSchema } from 'src/common/utils/validators';
 import { SerieTitleTranslationSchema } from './schemas/serie-title-translation.schema';
 import { SerieTitleTranslationMapper } from 'src/common/mappers/serie-title-translation.mapper';

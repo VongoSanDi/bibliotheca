@@ -1,4 +1,4 @@
-import { Serie } from "../../types/apis/serie";
+import { Serie } from "../../types/entities/serie.entity";
 import { ApiService } from "./api.service";
 
 export class SerieService extends ApiService<Serie> {
@@ -6,6 +6,6 @@ export class SerieService extends ApiService<Serie> {
   protected endpoint = '/serie';
 
   async searchByName(title: string): Promise<Serie[]> {
-    return this.fetchApi<Serie[]>(`${this.url}/search?name=${encodeURIComponent(title)}`);
+    return this.fetchApi<Serie[]>(`${this.baseUrl}/title?name=${encodeURIComponent(title)}`);
   }
 }

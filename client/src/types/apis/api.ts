@@ -25,8 +25,8 @@ export interface ApiResponse<T> {
  * Pagination params
  */
 export interface PaginationParams {
-  take?: number;
   page?: number;
-  order?: 'ASC | DESC';
+  limit?: number;
   orderBy?: string;
+  order?: 'ASC | DESC';
 }

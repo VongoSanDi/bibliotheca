@@ -3,9 +3,29 @@ import { ApiResponse, PaginationParams } from "../../types/apis/api";
 export abstract class ApiService<T> {
   protected abstract baseUrl: string;
   protected abstract endpoint: string;
+  protected language_id: number = 1;
 
-  protected get url(): string {
-    return `${this.baseUrl}${this.endpoint}`;
+  protected get url(): URL {
+    return new URL(`${this.baseUrl}${this.endpoint}`);
+  }
+
+  protected addPaginationParams(paginationParams: PaginationParams): URLSearchParams {
+    const queryParams = new URLSearchParams()
+
+    if (paginationParams.page) {
+      queryParams.append('page', paginationParams.page.toString());
+    }
+    if (paginationParams.limit) {
+      queryParams.append('limit', paginationParams.limit.toString());
+    }
+    if (paginationParams.orderBy) {
+      queryParams.append('orderBy', paginationParams.orderBy);
+    }
+    if (paginationParams.order) {
+      queryParams.append('order', paginationParams.order);
+    }
+
+    return queryParams;
   }
 
   protected async fetchApi<R>(url: string, options: RequestInit = {}): Promise<R> {
@@ -28,7 +48,7 @@ export abstract class ApiService<T> {
   async getAll(paginationParams?: PaginationParams): Promise<ApiResponse<T[]>> {
     const queryParams = new URLSearchParams()
     if (paginationParams?.page) queryParams.append('page', paginationParams.page.toString());
-    if (paginationParams?.take) queryParams.append('take', paginationParams.take.toString());
+    if (paginationParams?.limit) queryParams.append('take', paginationParams.limit.toString());
     if (paginationParams?.order) queryParams.append('order', paginationParams.order);
     if (paginationParams?.orderBy) queryParams.append('orderBy', paginationParams.orderBy);
 
@@ -37,11 +57,12 @@ export abstract class ApiService<T> {
   }
 
   async getById(id: number): Promise<ApiResponse<T>> {
-    return this.fetchApi(`${this.url}/${id}`)
+    const param = new URLSearchParams(id.toString())
+    return this.fetchApi(`${this.url}/${param}`)
   }
 
   async create(data: Partial<T>): Promise<ApiResponse<T>> {
-    return this.fetchApi(this.url, {
+    return this.fetchApi(`${this.url}`, {
       method: 'POST',
       body: JSON.stringify(data)
     })
