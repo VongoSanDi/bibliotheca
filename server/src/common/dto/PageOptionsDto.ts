@@ -5,6 +5,9 @@ enum Order {
   'DESC'
 }
 
+/**
+ * Pagination params send by the client
+ */
 export class PageOptionsDto {
   @ApiPropertyOptional({ default: 10, minimum: 1, maximum: 50 })
   readonly take!: number;

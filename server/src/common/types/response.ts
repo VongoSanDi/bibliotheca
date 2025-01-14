@@ -1,4 +1,4 @@
-import { PageMetaDto, PageOptionsDto } from '../dto/PageOptionsDto';
+import { PageMetaDto } from '../dto/PageOptionsDto';
 
 // Used for sending back a single object
 export interface Response<T> {
@@ -9,7 +9,7 @@ export interface Response<T> {
 
 // Used for sending back multiples objects
 export interface PaginatedResult<T> {
-  results: T[];
+  data: T[];
   itemCount: number;
-  pageOptionsDto: PageOptionsDto;
+  pageMetaDto: PageMetaDto;
 }

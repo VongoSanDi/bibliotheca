@@ -15,7 +15,12 @@ export interface PageMeta {
  */
 export interface ApiResponse<T> {
   data: T,
-  meta?: {
+  timestamp: string
+}
+
+export interface PaginatedApiResponse<T> {
+  data: T[],
+  meta: {
     pagination: PageMeta,
     timestamp: string
   }

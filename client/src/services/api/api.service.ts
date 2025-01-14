@@ -1,4 +1,4 @@
-import { ApiResponse, PaginationParams } from "../../types/apis/api";
+import { ApiResponse, PaginatedApiResponse, PaginationParams } from "../../types/apis/api";
 
 export abstract class ApiService<T> {
   protected abstract baseUrl: string;
@@ -45,7 +45,7 @@ export abstract class ApiService<T> {
     return result
   }
 
-  async getAll(paginationParams?: PaginationParams): Promise<ApiResponse<T[]>> {
+  async getAll(paginationParams?: PaginationParams): Promise<PaginatedApiResponse<T>> {
     const queryParams = new URLSearchParams()
     if (paginationParams?.page) queryParams.append('page', paginationParams.page.toString());
     if (paginationParams?.limit) queryParams.append('take', paginationParams.limit.toString());
@@ -53,7 +53,7 @@ export abstract class ApiService<T> {
     if (paginationParams?.orderBy) queryParams.append('orderBy', paginationParams.orderBy);
 
     const url = `${this.url}?${queryParams.toString()}`;
-    return this.fetchApi<ApiResponse<T[]>>(url);
+    return this.fetchApi<PaginatedApiResponse<T>>(url);
   }
 
   async getById(id: number): Promise<ApiResponse<T>> {
