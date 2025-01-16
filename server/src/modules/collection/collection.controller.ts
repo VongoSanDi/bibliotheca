@@ -15,11 +15,11 @@ import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { ApiBearerAuth, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { UserCollectionResponseDto } from './dto/retrieve-collection.dto';
 import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
-import { PaginatedResult } from 'src/common/types/response';
+import { PaginatedResponse } from 'src/common/types/response';
 
 @Controller('collection')
 export class CollectionController {
-  constructor(private readonly collectionService: CollectionService) {}
+  constructor(private readonly collectionService: CollectionService) { }
 
   @Post()
   create(@Body() createCollectionDto: CreateCollectionDto) {
@@ -38,16 +38,16 @@ export class CollectionController {
   async findOne(
     @Param('id', ParseIntPipe) id: number,
     @Query() pageOptionsDto: PageOptionsDto,
-  ): Promise<PaginatedResult<UserCollectionResponseDto>> {
+  ): Promise<PaginatedResponse<UserCollectionResponseDto>> {
     const dto = {
       user_id: id,
     };
-    const { results, itemCount } = await this.collectionService.findOne(
+    const { data, itemCount } = await this.collectionService.findOne(
       dto,
       pageOptionsDto,
     );
     return {
-      results,
+      data,
       itemCount,
       pageOptionsDto,
     };

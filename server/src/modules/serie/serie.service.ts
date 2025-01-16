@@ -31,7 +31,7 @@ export class SerieService {
     return `This action returns a #${id} serie`;
   }
 
-  async findByTitle(serie_title: string, pageOptionsDto: PageOptionsDto): Promise<{ results: SerieResponseDto[]; itemCount: number }> {
+  async findByTitle(serie_title: string, pageOptionsDto: PageOptionsDto): Promise<{ data: SerieResponseDto[]; itemCount: number }> {
     const validatedDto = ValidateSchema<string>(
       SerieByTitleResponseSchema,
       serie_title,
@@ -56,7 +56,7 @@ export class SerieService {
     const seriesMapped = series.map((serie) => SerieMapper.toResponseDto(serie))
 
     return {
-      results: seriesMapped, itemCount
+      data: seriesMapped, itemCount
     }
   }
 

@@ -54,7 +54,7 @@ export class SerieTitleTranslationService {
     return `This action returns a #${id} serieTitleTranslation`;
   }
 
-  async findSeries(dto: RetrieveSerieTitleTranslationDto, pageOptionsDto: PageOptionsDto): Promise<{ results: SerieTitleTranslationResponseDto[]; itemCount: number }> {
+  async findSeries(dto: RetrieveSerieTitleTranslationDto, pageOptionsDto: PageOptionsDto): Promise<{ data: SerieTitleTranslationResponseDto[]; itemCount: number }> {
     const validatedDto = ValidateSchema<SerieTitleTranslationResponseDto>(SerieTitleTranslationSchema, dto)
     const { serie_id, translated_title } = validatedDto
 
@@ -103,7 +103,7 @@ export class SerieTitleTranslationService {
     const seriesMapped = series.map((serie) => SerieTitleTranslationMapper.toResponseDto(serie))
 
     return {
-      results: seriesMapped, itemCount
+      data: seriesMapped, itemCount
     }
   }
 

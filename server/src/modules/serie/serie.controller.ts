@@ -18,7 +18,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { SerieResponseDto } from './dto/retrieve-serie.dto';
-import { PaginatedResult } from 'src/common/types/response';
+import { PaginatedResponse } from 'src/common/types/response';
 import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
 import { ApiPaginationQuery } from 'src/common/decorators/pagination.decorator';
 import { QueryTransformPipe } from 'src/common/utils/query-transform.pipe';
@@ -68,10 +68,10 @@ export class SerieController {
   async findByTitle(
     @Param('serie_title') serie_title: string,
     @Query(QueryTransformPipe) pageOptionsDto: PageOptionsDto
-  ): Promise<PaginatedResult<SerieResponseDto>> {
-    const { results, itemCount } = await this.serieService.findByTitle(serie_title, pageOptionsDto);
+  ): Promise<PaginatedResponse<SerieResponseDto>> {
+    const { data, itemCount } = await this.serieService.findByTitle(serie_title, pageOptionsDto);
     return {
-      results,
+      data,
       itemCount,
       pageOptionsDto,
     };

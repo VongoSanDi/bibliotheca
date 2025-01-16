@@ -22,7 +22,7 @@ import {
 export class BookService {
   constructor(
     @InjectRepository(Book) private readonly bookRepository: Repository<Book>,
-  ) {}
+  ) { }
   create(createBookDto: CreateBookDto) {
     return 'This action adds a new book';
   }
@@ -44,7 +44,7 @@ export class BookService {
   async findByFilters(
     dto: RetrieveBookByFiltersDto,
     pageOptionsDto: PageOptionsDto,
-  ): Promise<{ results: BookResponseDto[]; itemCount: number }> {
+  ): Promise<{ data: BookResponseDto[]; itemCount: number }> {
     const validatedDto = ValidateSchema<RetrieveBookByFiltersDto>(
       RetrieveBookByFiltersSchema,
       dto,
@@ -72,7 +72,7 @@ export class BookService {
     });
     const booksMapped = books.map((book) => BookMapper.toResponseDto(book));
     return {
-      results: booksMapped,
+      data: booksMapped,
       itemCount,
     };
   }

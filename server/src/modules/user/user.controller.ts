@@ -15,13 +15,13 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResponseDto } from './dto/retrieve-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
-import { PaginatedResult } from 'src/common/types/response';
+import { PaginatedResponse } from 'src/common/types/response';
 import { Public } from '../auth/decorators/public.decorator';
 import { ApiPaginationQuery } from 'src/common/decorators/pagination.decorator';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Public()
   @Post()
@@ -49,11 +49,11 @@ export class UserController {
   @ApiPaginationQuery()
   async findAll(
     @Query() pageOptionsDto: PageOptionsDto,
-  ): Promise<PaginatedResult<UserResponseDto>> {
-    const { results, itemCount } =
+  ): Promise<PaginatedResponse<UserResponseDto>> {
+    const { data, itemCount } =
       await this.userService.findAll(pageOptionsDto);
     return {
-      results,
+      data,
       pageOptionsDto,
       itemCount,
     };

@@ -26,7 +26,7 @@ import { CreateUserSchema, RetrieveUserSchema } from './schemas/user.schema';
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   /*
    *
@@ -59,7 +59,7 @@ export class UserService {
 
   async findAll(
     pageOptionsDto: PageOptionsDto,
-  ): Promise<{ results: UserResponseDto[]; itemCount: number }> {
+  ): Promise<{ data: UserResponseDto[]; itemCount: number }> {
     try {
       const validatePageOptions = ValidateSchema<PageOptionsDto>(
         PageOptionsSchema,
@@ -75,7 +75,7 @@ export class UserService {
 
       const userMapped = users.map((user) => UserMapper.toResponseDto(user));
 
-      return { results: userMapped, itemCount };
+      return { data: userMapped, itemCount };
     } catch (e) {
       throw e;
     }

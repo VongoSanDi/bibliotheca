@@ -23,7 +23,7 @@ import {
   RetrieveSerieTitleTranslationDto,
   SerieTitleTranslationResponseDto,
 } from './dto/retrieve-serie-title-translation.dto';
-import { PaginatedResult } from 'src/common/types/response';
+import { PaginatedResponse } from 'src/common/types/response';
 import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
 import { ApiPaginationQuery } from 'src/common/decorators/pagination.decorator';
 import { QueryTransformPipe } from 'src/common/utils/query-transform.pipe';
@@ -74,15 +74,15 @@ export class SerieTitleTranslationController {
     @Query(QueryTransformPipe) pageOptionsDto: PageOptionsDto,
     @Query('serie_id') serie_id?: number,
     @Query('translated_title') translated_title?: string)
-    : Promise<PaginatedResult<SerieTitleTranslationResponseDto>> {
+    : Promise<PaginatedResponse<SerieTitleTranslationResponseDto>> {
     const dto = {
       serie_id,
       translated_title
     }
 
-    const { results, itemCount } = await this.serieTitleTranslationService.findSeries(dto, pageOptionsDto)
+    const { data, itemCount } = await this.serieTitleTranslationService.findSeries(dto, pageOptionsDto)
     return {
-      results,
+      data,
       itemCount,
       pageOptionsDto
     }

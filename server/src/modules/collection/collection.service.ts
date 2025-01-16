@@ -33,7 +33,7 @@ export class CollectionService {
   async findOne(
     dto: RetrieveCollectionDto,
     pageOptionsDto: PageOptionsDto,
-  ): Promise<{ results: UserCollectionResponseDto[]; itemCount: number }> {
+  ): Promise<{ data: UserCollectionResponseDto[]; itemCount: number }> {
     try {
       const validatedDto = ValidateSchema<RetrieveCollectionDto>(
         RetrieveUserCollectionSchema,
@@ -62,7 +62,7 @@ export class CollectionService {
       const collectionMapped = collection.map((collection) =>
         UserCollectionMapper.toResponseDto(collection),
       );
-      return { results: collectionMapped, itemCount: itemCount };
+      return { data: collectionMapped, itemCount: itemCount };
     } catch (e) {
       throw e;
     }

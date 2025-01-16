@@ -7,36 +7,43 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PageMetaDto, PageOptionsDto } from '../dto/PageOptionsDto';
-import { Response, PaginatedResult } from '../types/response';
+import { Response, PaginatedResponse } from '../types/response';
 
 @Injectable()
 export class TransformInterceptor<T>
-  implements NestInterceptor<T | PaginatedResult<T>, Response<T | T[]>> {
+  implements NestInterceptor<T | PaginatedResponse<T>, Response<T | T[]>> {
   intercept(
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T | T[]>> {
     return next.handle().pipe(
-      map((data) => {
+      map((result) => {
         const timestamp = new Date().toISOString();
 
-        if (this.isPaginatedResult(data)) {
+        if (this.isPaginatedResponse(result)) {
           return {
-            data: data.results,
-            meta: new PageMetaDto(data.pageOptionsDto, data.itemCount),
+            data: result.data,
+            meta: {
+              pagination: new PageMetaDto(result.pageOptionsDto, result.itemCount)
+            },
             timestamp,
           };
         }
 
         return {
-          data,
+          data: result,
           timestamp,
         };
       }),
     );
   }
 
-  private isPaginatedResult(data: any): data is PaginatedResult<T> {
+  /**
+   * Check if the response send by the controller is paginated or not
+   * @param data 
+   * @returns boolean
+   */
+  private isPaginatedResponse(data: any): data is PaginatedResponse<T> {
     return (
       data !== null &&
       typeof data === 'object' &&

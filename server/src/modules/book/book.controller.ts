@@ -18,13 +18,13 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { PageOptionsDto } from 'src/common/dto/PageOptionsDto';
-import { PaginatedResult } from 'src/common/types/response';
+import { PaginatedResponse } from 'src/common/types/response';
 import { BookResponseDto } from './dto/retrieve-book';
 import { ApiPaginationQuery } from 'src/common/decorators/pagination.decorator';
 
 @Controller('book')
 export class BookController {
-  constructor(private readonly bookService: BookService) {}
+  constructor(private readonly bookService: BookService) { }
 
   @Post()
   create(@Body() createBookDto: CreateBookDto) {
@@ -53,18 +53,18 @@ export class BookController {
     @Query() pageOptionsDto: PageOptionsDto,
     @Query('title') title?: string,
     @Query('author_id') author_id?: number,
-  ): Promise<PaginatedResult<BookResponseDto>> {
+  ): Promise<PaginatedResponse<BookResponseDto>> {
     const dto = {
       title,
       author_id,
     };
 
-    const { results, itemCount } = await this.bookService.findByFilters(
+    const { data, itemCount } = await this.bookService.findByFilters(
       dto,
       pageOptionsDto,
     );
     return {
-      results,
+      data,
       itemCount,
       pageOptionsDto,
     };
